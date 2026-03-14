@@ -65,9 +65,26 @@ const navLinks = [
       ">41sy</span>
     </a>
 
-    <!-- Nav links -->
+    <!-- Mobile: active section indicator -->
+    <span id="mobile-section-label" class="mobile-section-label" aria-live="polite"></span>
+
+    <!-- Mobile: nav menu button -->
+    <button id="mobile-nav-btn" class="mobile-nav-btn" aria-label="Open navigation" aria-expanded="false">
+      <svg id="mobile-nav-icon-open" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <rect x="1" y="4" width="16" height="1.5" fill="currentColor"/>
+        <rect x="1" y="8.25" width="16" height="1.5" fill="currentColor"/>
+        <rect x="1" y="12.5" width="16" height="1.5" fill="currentColor"/>
+      </svg>
+      <svg id="mobile-nav-icon-close" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" style="display:none;">
+        <line x1="3" y1="3" x2="15" y2="15" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="15" y1="3" x2="3" y2="15" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </button>
+
+    <!-- Nav links (desktop only) -->
     <nav
       aria-label="Site navigation"
+      class="site-nav"
       style="
         display: flex;
         align-items: center;
@@ -80,17 +97,109 @@ const navLinks = [
       {navLinks.map(link => (
         <a href={link.href} class="nav-link">{link.label}</a>
       ))}
-      <div style="flex-shrink:0;margin-left:0.25rem;border-left:1px solid var(--color-border);padding-left:0.75rem;">
-        <ThemeToggle />
-      </div>
     </nav>
+
+    <!-- Theme toggle (always visible) -->
+    <div style="flex-shrink:0;margin-left:0.25rem;border-left:1px solid var(--color-border);padding-left:0.75rem;">
+      <ThemeToggle />
+    </div>
+  </div>
+
+  <!-- Mobile dropdown nav menu -->
+  <div id="mobile-nav-menu" class="mobile-nav-menu" role="dialog" aria-label="Section navigation">
+    {navLinks.map(link => (
+      <a href={link.href} class="mobile-nav-link">
+        <span>{link.label}</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    ))}
   </div>
 </header>
+
+<style>
+  .mobile-section-label {
+    display: none;
+  }
+
+  .mobile-nav-btn {
+    display: none;
+  }
+
+  .mobile-nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    flex-direction: column;
+    z-index: 99;
+  }
+
+  .mobile-nav-menu.is-open {
+    display: flex;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--color-border);
+    opacity: 0.7;
+    transition: opacity 0.15s, color 0.15s, padding-left 0.15s;
+  }
+
+  .mobile-nav-link:last-child {
+    border-bottom: none;
+  }
+
+  @media (max-width: 640px) {
+    .site-nav {
+      display: none !important;
+    }
+    .mobile-section-label {
+      display: inline-flex;
+      align-items: center;
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--color-accent);
+      padding-left: 0.5rem;
+    }
+    .mobile-nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      cursor: pointer;
+      padding: 0.3rem;
+      flex-shrink: 0;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .mobile-nav-btn[aria-expanded="true"] {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+  }
+</style>
 
 <script>
   // Highlight active nav link based on scroll position
   const links = document.querySelectorAll('.nav-link');
   const sections = document.querySelectorAll('section[id]');
+  const mobileLabel = document.getElementById('mobile-section-label');
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -99,6 +208,7 @@ const navLinks = [
           links.forEach(l => l.classList.remove('active'));
           const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
           active?.classList.add('active');
+          if (mobileLabel) mobileLabel.textContent = active?.textContent ?? '';
         }
       });
     },
@@ -116,4 +226,27 @@ const navLinks = [
       header?.style.removeProperty('box-shadow');
     }
   }, { passive: true });
+
+  // Mobile nav menu toggle
+  const menuBtn = document.getElementById('mobile-nav-btn');
+  const menu = document.getElementById('mobile-nav-menu');
+  const iconOpen = document.getElementById('mobile-nav-icon-open');
+  const iconClose = document.getElementById('mobile-nav-icon-close');
+
+  menuBtn?.addEventListener('click', () => {
+    const isOpen = menu?.classList.toggle('is-open');
+    menuBtn.setAttribute('aria-expanded', String(isOpen));
+    if (iconOpen) iconOpen.style.display = isOpen ? 'none' : '';
+    if (iconClose) iconClose.style.display = isOpen ? '' : 'none';
+  });
+
+  // Close menu when a section link is tapped
+  menu?.querySelectorAll('.mobile-nav-link').forEach(a => {
+    a.addEventListener('click', () => {
+      menu.classList.remove('is-open');
+      menuBtn?.setAttribute('aria-expanded', 'false');
+      if (iconOpen) iconOpen.style.display = '';
+      if (iconClose) iconClose.style.display = 'none';
+    });
+  });
 </script>

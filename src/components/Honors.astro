@@ -34,7 +34,7 @@ const honors = [
         <div data-reveal class="flat-row">
           <div>
             <span style="font-size:0.9rem;font-weight:500;">{h.award}</span>
-            <span class="meta" style="margin-left:0.5rem;">· {h.org}</span>
+            <span class="meta honor-org" style="margin-left:0.5rem;">· {h.org}</span>
           </div>
           <span class="meta" style="flex-shrink:0;">{h.date}</span>
         </div>
@@ -42,3 +42,11 @@ const honors = [
     </div>
   </div>
 </section>
+
+<style>
+  @media (max-width: 640px) {
+    .honor-org {
+      margin-left: 0 !important;
+    }
+  }
+</style>

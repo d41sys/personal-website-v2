@@ -33,16 +33,9 @@ const socialLinks = [
 
 <section id="top" style="padding: 5rem 0 4rem; border-top: none;">
   <div class="container">
-    <div
-      style="
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 3rem;
-      align-items: stretch;
-    "
-    >
+    <div class="hero-grid">
       <!-- Left: profile photo -->
-      <div data-reveal style="flex-shrink: 0; display: flex;">
+      <div data-reveal class="hero-photo-col" style="flex-shrink: 0; display: flex;">
         <div
           style="
           width: 16rem;
@@ -114,7 +107,7 @@ const socialLinks = [
         </div>
 
         <!-- Social links -->
-        <div data-reveal style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+        <div data-reveal class="hero-social" style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
           {
             socialLinks.map((link) => (
               <a
@@ -139,7 +132,7 @@ const socialLinks = [
                 onmouseout="this.style.opacity='0.6';this.style.borderColor='var(--color-border)';this.style.color='inherit';"
               >
                 <Icon name={link.icon} width={13} height={13} />
-                <span>{link.label}</span>
+                <span class="hero-btn-label">{link.label}</span>
               </a>
             ))
           }
@@ -149,14 +142,40 @@ const socialLinks = [
   </div>
 </section>
 
-<!-- Collapse to single column on small screens -->
 <style>
-  @media (max-width: 500px) {
-    #top .container > div {
-      grid-template-columns: 1fr !important;
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3rem;
+  align-items: stretch;
+}
+
+  @media (max-width: 640px) {
+    #top {
+      padding: 2.5rem 0 2rem !important;
+      min-height: 100dvh;
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center;
     }
-    #top .container > div > div:last-child {
+    #top .container {
+      width: 100%;
+    }
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    /* Hide photo on mobile */
+    .hero-photo-col {
+      display: none !important;
+    }
+    /* Icons only on mobile */
+    .hero-btn-label {
       display: none;
+    }
+    /* Center buttons on mobile */
+    .hero-social {
+      justify-content: center;
     }
   }
 </style>

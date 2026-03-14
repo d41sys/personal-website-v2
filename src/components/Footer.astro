@@ -67,9 +67,15 @@ const socialLinks = [
           onmouseout="this.style.opacity='0.55';this.style.color='inherit';"
         >
           <Icon name={link.icon} width={14} height={14} />
-          <span>{link.label}</span>
-        </a>
+          <span class="footer-link-label">{link.label}</span>
+</a>
       ))}
     </div>
   </div>
 </footer>
+
+<style>
+  @media (max-width: 640px) {
+    .footer-link-label { display: none; }
+  }
+</style>

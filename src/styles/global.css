@@ -106,6 +106,10 @@ section {
   padding: 4.5rem 0;
 }
 
+section[id] {
+  scroll-margin-top: 4rem;
+}
+
 .container {
   max-width: 54rem;
   margin: 0 auto;
@@ -430,3 +434,25 @@ a {
 [data-theme="dark"] #cursor-dot { mix-blend-mode: screen; }
 #cursor-dot.cd-visible { opacity: 0.55; }
 #cursor-dot.cd-hover { width: 22px; height: 22px; opacity: 0.18; }
+
+/* ─── Mobile base ───────────────────────────────────────── */
+@media (max-width: 640px) {
+  section { padding: 2.75rem 0; }
+  .container { padding: 0 1.1rem; }
+  h1 { font-size: clamp(1.6rem, 8vw, 2.2rem); }
+}
+
+/* ─── Disable hover effects on touch devices ────────────── */
+@media (hover: none) {
+  .tl-row:hover .tl-body               { transform: none !important; }
+  .pub-entry:hover                      { padding-left: 0.35rem !important; border-left-color: transparent !important; }
+  .pub-entry:hover .pub-title-link      { color: var(--color-text) !important; text-decoration-color: transparent !important; }
+  .flat-row:hover                       { padding-left: 0.35rem !important; border-left-color: transparent !important; }
+  .peer-row:hover                       { padding-left: 0.35rem !important; }
+  .tag:hover                            { border-color: var(--color-border) !important; color: var(--color-muted) !important; background: none !important; }
+  .text-link:hover::after               { width: 0 !important; }
+  .nav-link:hover                       { opacity: 0.6 !important; }
+  .nav-link:hover::after                { width: 0 !important; }
+  .collapse-btn:hover                   { color: var(--color-muted) !important; }
+  .section-heading:hover .section-heading-rule { width: 2rem !important; }
+}

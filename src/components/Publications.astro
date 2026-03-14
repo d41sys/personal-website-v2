@@ -26,7 +26,7 @@ const DEFAULT_VISIBLE = 2;
     <SectionHeading title="Publications" />
 
     <div data-reveal style="margin-bottom: 2rem;">
-      <p class="meta">
+      <p class="meta pub-stats">
         9 published · 1 under review · {totalCitations}+ total citations ·
         <a
           href="https://scholar.google.com/citations?user=JU4RyPQAAAAJ&hl=en"
@@ -121,6 +121,14 @@ const DEFAULT_VISIBLE = 2;
     display: none;
   }
 
+  @keyframes pubReveal {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .pub-revealing {
+    animation: pubReveal 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   .scholar-link {
     display: inline-flex;
     align-items: center;
@@ -143,6 +151,20 @@ const DEFAULT_VISIBLE = 2;
     opacity: 1;
     transform: translateY(0);
   }
+
+  @media (hover: none) {
+    .scholar-link:hover              { transform: none !important; }
+    .scholar-link:hover .scholar-icon { opacity: 0 !important; transform: translateY(4px) !important; }
+  }
+
+  @media (max-width: 640px) {
+    .pub-stats {
+      text-align: center;
+    }
+    .scholar-icon {
+      display: none;
+    }
+  }
 </style>
 
 <script>
@@ -159,6 +181,8 @@ const DEFAULT_VISIBLE = 2;
         if (idx < defaultVisible) return;
         if (expanded) {
           el.classList.remove('pub-hidden');
+          el.classList.add('pub-revealing');
+          el.addEventListener('animationend', () => el.classList.remove('pub-revealing'), { once: true });
         } else {
           el.classList.add('pub-hidden');
         }

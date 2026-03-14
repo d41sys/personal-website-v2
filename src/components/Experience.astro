@@ -48,7 +48,7 @@ const flags: Record<string, string> = {
                 <ul
                   class="exp-details"
                   id={detailsId}
-                  style="display:none;text-align:left;margin:0.75rem 0 0.5rem;padding:0.65rem 0 0.5rem 1rem;border-top:1px solid var(--color-border);font-size:0.85rem;color:var(--color-muted);line-height:1.75;"
+                  style="text-align:left;margin:0.75rem 0 0.5rem;padding:0.65rem 0 0.5rem 1rem;border-top:1px solid var(--color-border);font-size:0.85rem;color:var(--color-muted);line-height:1.75;"
                 >
                   {exp.data.projects
                     ? exp.data.projects.map(proj => (
@@ -106,7 +106,7 @@ const flags: Record<string, string> = {
                 <ul
                   class="exp-details"
                   id={detailsId}
-                  style="display:none;margin:0.75rem 0 0.5rem;padding:0.65rem 0 0.5rem 1rem;border-top:1px solid var(--color-border);font-size:0.85rem;color:var(--color-muted);line-height:1.75;"
+                  style="margin:0.75rem 0 0.5rem;padding:0.65rem 0 0.5rem 1rem;border-top:1px solid var(--color-border);font-size:0.85rem;color:var(--color-muted);line-height:1.75;"
                 >
                   {exp.data.projects
                     ? exp.data.projects.map(proj => (
@@ -256,11 +256,45 @@ const flags: Record<string, string> = {
 .stl-cell-left:has(.stl-card):hover .stl-card  { transform: translateX(-5px); }
 .stl-cell-right:has(.stl-card):hover .stl-card { transform: translateX(5px); }
 
-/* ── Mobile: stack ── */
+/* ── Details animation ── */
+.exp-details {
+  display: none;
+}
+@keyframes expandDetails {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.exp-details.is-open {
+  display: block;
+  animation: expandDetails 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Mobile: single column, show all entries ── */
 @media (max-width: 600px) {
-  .stl-row, .stl-labels { grid-template-columns: 0 2rem 1fr; }
-  .stl-cell-left { display: none; }
-  .stl-cell-right { padding-left: 0.75rem; }
+  .stl-labels { display: none; }
+  .stl-row { grid-template-columns: 2rem 1fr; }
+
+  /* Both cells occupy the content column; only one has content per row */
+  .stl-cell-left {
+    display: block;
+    grid-column: 2;
+    grid-row: 1;
+    padding-right: 0;
+    padding-left: 0.75rem;
+  }
+  .stl-cell-left .stl-card-header { text-align: left !important; }
+  .stl-collapse-left { text-align: left; width: auto; }
+  .stl-center-col { grid-column: 1; grid-row: 1; }
+  .stl-cell-right { grid-column: 2; grid-row: 1; padding-left: 0.75rem; }
+
+  /* Unified hover direction on mobile */
+  .stl-cell-left:has(.stl-card):hover .stl-card { transform: translateX(5px); }
+}
+
+@media (hover: none) {
+  .stl-cell-left:has(.stl-card):hover .stl-card  { transform: none !important; }
+  .stl-cell-right:has(.stl-card):hover .stl-card { transform: none !important; }
+  .stl-row:hover .stl-dot { border-color: var(--color-border) !important; }
 }
 </style>
 
@@ -274,7 +308,13 @@ const flags: Record<string, string> = {
     let open = false;
     btn.addEventListener('click', () => {
       open = !open;
-      panel.style.display = open ? 'block' : 'none';
+      if (open) {
+        panel.style.display = '';
+        panel.classList.add('is-open');
+      } else {
+        panel.classList.remove('is-open');
+        panel.style.display = 'none';
+      }
       label.textContent = open ? '− details' : '+ details';
     });
   });
