@@ -30,3 +30,4 @@ yarn-error.log*
 # TypeScript cache
 *.tsbuildinfo
 everything-claude-code/
+.playwright-mcp/
