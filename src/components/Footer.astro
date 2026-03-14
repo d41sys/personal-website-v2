@@ -9,39 +9,19 @@ const socialLinks = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tien-datle716',                    icon: 'simple-icons:linkedin' },
   { label: 'X',        href: 'https://x.com/d41sy___',                                       icon: 'simple-icons:x' },
   { label: 'Scholar',  href: 'https://scholar.google.com/citations?user=JU4RyPQAAAAJ&hl=en', icon: 'simple-icons:googlescholar' },
-  { label: 'ORCID',   href: 'https://orcid.org/0009-0005-4877-3200',                       icon: 'simple-icons:orcid' },
+  { label: 'ORCID',   href: 'https://orcid.org/0009-0005-9484-8444',                       icon: 'simple-icons:orcid' },
 ];
 ---
 
 <footer style="padding: 3rem 0 2rem;">
   <div class="container">
-    <!-- Top row: name + tagline -->
+    <!-- Top row: name + tagline + year -->
     <div style="
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1.75rem;
-      padding-bottom: 1.75rem;
-      border-bottom: 0.5px solid var(--color-border);
       text-align: center;
+      margin-bottom: 1.75rem;
     ">
-      <div>
-        <div style="
-          font-family: var(--font-heading);
-          font-size: 1rem;
-          font-weight: 700;
-          font-variant: small-caps;
-          letter-spacing: 0.05em;
-          text-shadow: 0 0 0.2px currentColor;
-          margin-bottom: 0.3rem;
-        ">
-          Tien-Dat Le
-        </div>
-        <div class="meta">EngD Researcher · Eindhoven University of Technology</div>
-      </div>
-      <div class="meta" style="align-self:flex-end;">© {year}</div>
+      
+      <div class="meta" style="margin-top:0.35rem;">© {year}</div>
     </div>
 
     <!-- Social icons + links -->
@@ -53,28 +33,54 @@ const socialLinks = [
           rel="noopener noreferrer"
           aria-label={link.label}
           title={link.label}
-          style="
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            font-weight: 300;
-            opacity: 0.55;
-            transition: opacity 0.2s, color 0.2s;
-          "
-          onmouseover="this.style.opacity='1';this.style.color='var(--color-accent)';"
-          onmouseout="this.style.opacity='0.55';this.style.color='inherit';"
+          class="footer-social-link"
         >
           <Icon name={link.icon} width={14} height={14} />
           <span class="footer-link-label">{link.label}</span>
-</a>
+        </a>
       ))}
     </div>
   </div>
 </footer>
 
 <style>
+  .footer-social-link {
+    display: flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 300;
+    opacity: 0.55;
+    transition: opacity 0.2s, color 0.2s;
+  }
+
+  .footer-social-link:hover {
+    opacity: 1;
+    color: var(--color-accent);
+  }
+
+  /* Desktop: icon only by default, reveal label on hover */
+  @media (min-width: 641px) {
+    .footer-link-label {
+      max-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      padding-left: 0;
+      opacity: 0;
+      transition:
+        max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.2s ease;
+    }
+
+    .footer-social-link:hover .footer-link-label {
+      max-width: 6rem;
+      padding-left: 0.35rem;
+      opacity: 1;
+    }
+  }
+
+  /* Mobile: hide labels entirely */
   @media (max-width: 640px) {
     .footer-link-label { display: none; }
   }

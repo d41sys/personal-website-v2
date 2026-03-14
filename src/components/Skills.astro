@@ -21,7 +21,7 @@ const skills = [
 ];
 
 const peerReview = [
-  { journal: 'IEEE Transactions on Information Forensics and Security (TIFS)', count: 4 },
+  { journal: 'IEEE Transactions on Information Forensics and Security', count: 4 },
   { journal: 'Scientific Reports', count: 2 },
   { journal: 'Cluster Computing', count: 2 },
   { journal: 'IEEE Network', count: 1 },
@@ -55,10 +55,10 @@ const peerReview = [
       <div data-reveal>
         <h3 style="font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.6;margin-bottom:1.25rem;">Peer Review Service</h3>
         <p class="meta" style="margin-bottom:1rem;">10 reviews · 5 journals</p>
-        <div style="display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;flex-direction:column;">
           {peerReview.map(item => (
             <div class="peer-row">
-              <span style="font-size:0.82rem;">{item.journal}</span>
+              <span style="font-size:0.82rem;padding:0.25rem 0;">{item.journal}</span>
               <span class="meta" style="flex-shrink:0;margin-left:0.75rem;">{item.count}×</span>
             </div>
           ))}
@@ -79,11 +79,16 @@ const peerReview = [
   align-items: baseline;
   border-bottom: 1px solid var(--color-border);
   padding: 0.5rem 0 0.5rem 0.35rem;
-  transition: padding-left 0.15s;
+  box-shadow: inset 2px 0 0 transparent;
+  transition: padding-left 0.15s, box-shadow 0.15s;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
-.peer-row:hover {
-  padding-left: 0.65rem;
+
+@media (min-width: 641px) {
+  .peer-row:hover {
+    padding-left: 0.65rem;
+    box-shadow: inset 2px 0 0 var(--color-accent);
+  }
 }
 </style>

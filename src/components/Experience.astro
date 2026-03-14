@@ -45,40 +45,41 @@ const flags: Record<string, string> = {
                   </div>
                   <div class="stl-org">{exp.data.organization}</div>
                 </div>
-                <ul
-                  class="exp-details"
-                  id={detailsId}
-                  style="text-align:left;margin:0.75rem 0 0.5rem;padding:0.65rem 0 0.5rem 1rem;border-top:1px solid var(--color-border);font-size:0.85rem;color:var(--color-muted);line-height:1.75;"
-                >
-                  {exp.data.projects
-                    ? exp.data.projects.map(proj => (
-                        <li style="list-style:none; margin-bottom:0.75rem; padding:0;">
-                          <div style="font-weight:600; font-size:0.83rem; color:var(--color-text); margin-bottom:0.25rem;">
-                            {proj.title}
-                            {proj.period && <span class="meta" style="font-weight:400; margin-left:0.4rem;">{proj.period}</span>}
-                          </div>
-                          <ul style="margin:0; padding-left:0; padding-right:1rem; list-style:disc; list-style-position:inside;">
-                            {proj.description.map(line => (
-                              <li style="margin-bottom:0.25rem;">{line}</li>
-                            ))}
-                            {proj.output && (
-                              <li style="color:var(--color-accent);list-style:none;margin-top:0.15rem;">
-                                → [{proj.output}]
-                              </li>
-                            )}
-                          </ul>
-                        </li>
-                      ))
-                    : exp.data.description.map(line => (
-                        <li style="margin-bottom:0.4rem; padding-right:1rem;">{line}</li>
-                      ))
-                  }
-                  {!exp.data.projects && exp.data.output && (
-                    <li style="color:var(--color-accent);list-style:none;margin-top:0.25rem;">
-                      → [{exp.data.output}]
-                    </li>
-                  )}
-                </ul>
+                <div class="exp-details-wrap" id={detailsId}>
+                  <ul
+                    class="exp-details"
+                    style="text-align:left;margin:0 0 0.5rem;padding:0.65rem 0 0.5rem 1rem;font-size:0.85rem;color:var(--color-muted);line-height:1.75;"
+                  >
+                    {exp.data.projects
+                      ? exp.data.projects.map(proj => (
+                          <li style="list-style:none; margin-bottom:0.75rem; padding:0;">
+                            <div style="font-weight:600; font-size:0.83rem; color:var(--color-text); margin-bottom:0.25rem;">
+                              {proj.title}
+                              {proj.period && <span class="meta" style="font-weight:400; margin-left:0.4rem;">{proj.period}</span>}
+                            </div>
+                            <ul style="margin:0; padding-left:0; padding-right:1rem; list-style:disc; list-style-position:inside;">
+                              {proj.description.map(line => (
+                                <li style="margin-bottom:0.25rem;">{line}</li>
+                              ))}
+                              {proj.output && (
+                                <li style="color:var(--color-accent);list-style:none;margin-top:0.15rem;">
+                                  → [{proj.output}]
+                                </li>
+                              )}
+                            </ul>
+                          </li>
+                        ))
+                      : exp.data.description.map(line => (
+                          <li style="margin-bottom:0.4rem; padding-right:1rem;">{line}</li>
+                        ))
+                    }
+                    {!exp.data.projects && exp.data.output && (
+                      <li style="color:var(--color-accent);list-style:none;margin-top:0.25rem;">
+                        → [{exp.data.output}]
+                      </li>
+                    )}
+                  </ul>
+                </div>
                 {hasDetails && (
                   <button class="collapse-btn stl-collapse-left" data-details={detailsId}>
                     <span class="collapse-label">+ details</span>
@@ -91,7 +92,7 @@ const flags: Record<string, string> = {
           {/* Center — dot + connecting line */}
           <div class="stl-center-col">
             <div class={`stl-dot${isCurrent ? ' stl-dot-current' : ''}`}></div>
-            {!isLast && <div class="stl-vline"></div>}
+            <div class="stl-vline"></div>
           </div>
 
           {/* Right cell — Industry */}
@@ -103,40 +104,41 @@ const flags: Record<string, string> = {
                   {flags[exp.id] ?? ''} {exp.data.title}
                 </div>
                 <div class="stl-org">{exp.data.organization}</div>
-                <ul
-                  class="exp-details"
-                  id={detailsId}
-                  style="margin:0.75rem 0 0.5rem;padding:0.65rem 0 0.5rem 1rem;border-top:1px solid var(--color-border);font-size:0.85rem;color:var(--color-muted);line-height:1.75;"
-                >
-                  {exp.data.projects
-                    ? exp.data.projects.map(proj => (
-                        <li style="list-style:none; margin-bottom:0.75rem; padding:0;">
-                          <div style="font-weight:600; font-size:0.83rem; color:var(--color-text); margin-bottom:0.25rem;">
-                            {proj.title}
-                            {proj.period && <span class="meta" style="font-weight:400; margin-left:0.4rem;">{proj.period}</span>}
-                          </div>
-                          <ul style="margin:0; padding-left:1rem; list-style:disc;">
-                            {proj.description.map(line => (
-                              <li style="margin-bottom:0.25rem;">{line}</li>
-                            ))}
-                            {proj.output && (
-                              <li style="color:var(--color-accent);list-style:none;margin-top:0.15rem;">
-                                → [{proj.output}]
-                              </li>
-                            )}
-                          </ul>
-                        </li>
-                      ))
-                    : exp.data.description.map(line => (
-                        <li style="margin-bottom:0.4rem;">{line}</li>
-                      ))
-                  }
-                  {!exp.data.projects && exp.data.output && (
-                    <li style="color:var(--color-accent);list-style:none;margin-top:0.25rem;">
-                      → [{exp.data.output}]
-                    </li>
-                  )}
-                </ul>
+                <div class="exp-details-wrap" id={detailsId}>
+                  <ul
+                    class="exp-details"
+                    style="margin:0 0 0.5rem;padding:0.65rem 0 0.5rem 1rem;font-size:0.85rem;color:var(--color-muted);line-height:1.75;"
+                  >
+                    {exp.data.projects
+                      ? exp.data.projects.map(proj => (
+                          <li style="list-style:none; margin-bottom:0.75rem; padding:0;">
+                            <div style="font-weight:600; font-size:0.83rem; color:var(--color-text); margin-bottom:0.25rem;">
+                              {proj.title}
+                              {proj.period && <span class="meta" style="font-weight:400; margin-left:0.4rem;">{proj.period}</span>}
+                            </div>
+                            <ul style="margin:0; padding-left:1rem; list-style:disc;">
+                              {proj.description.map(line => (
+                                <li style="margin-bottom:0.25rem;">{line}</li>
+                              ))}
+                              {proj.output && (
+                                <li style="color:var(--color-accent);list-style:none;margin-top:0.15rem;">
+                                  → [{proj.output}]
+                                </li>
+                              )}
+                            </ul>
+                          </li>
+                        ))
+                      : exp.data.description.map(line => (
+                          <li style="margin-bottom:0.4rem;">{line}</li>
+                        ))
+                    }
+                    {!exp.data.projects && exp.data.output && (
+                      <li style="color:var(--color-accent);list-style:none;margin-top:0.25rem;">
+                        → [{exp.data.output}]
+                      </li>
+                    )}
+                  </ul>
+                </div>
                 {hasDetails && (
                   <button class="collapse-btn stl-collapse-right" data-details={detailsId}>
                     <span class="collapse-label">+ details</span>
@@ -230,9 +232,23 @@ const flags: Record<string, string> = {
 .stl-vline {
   flex: 1;
   width: 1px;
-  background: var(--color-border);
+  background-color: var(--color-border);
+  background-image: linear-gradient(to bottom, var(--color-accent), var(--color-accent));
+  background-repeat: no-repeat;
+  background-size: 100% 0%;
+  background-position: top;
   margin-top: 3px;
   min-height: 1rem;
+}
+
+@media (min-width: 641px) {
+  .stl-vline {
+    transition: background-size 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .stl-row:hover .stl-vline {
+    background-size: 100% 100%;
+  }
 }
 
 /* ── Card content ── */
@@ -257,16 +273,27 @@ const flags: Record<string, string> = {
 .stl-cell-right:has(.stl-card):hover .stl-card { transform: translateX(5px); }
 
 /* ── Details animation ── */
+.exp-details-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-top: 0.75rem;
+  border-top: 1px solid transparent;
+  transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              border-top-color 0.2s ease;
+}
+.exp-details-wrap.is-open {
+  grid-template-rows: 1fr;
+  border-top-color: var(--color-border);
+}
 .exp-details {
-  display: none;
+  overflow: hidden;
+  min-height: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
-@keyframes expandDetails {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.exp-details.is-open {
-  display: block;
-  animation: expandDetails 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+.exp-details-wrap.is-open .exp-details {
+  opacity: 1;
+  transition: opacity 0.25s ease 0.1s;
 }
 
 /* ── Mobile: single column, show all entries ── */
@@ -308,13 +335,7 @@ const flags: Record<string, string> = {
     let open = false;
     btn.addEventListener('click', () => {
       open = !open;
-      if (open) {
-        panel.style.display = '';
-        panel.classList.add('is-open');
-      } else {
-        panel.classList.remove('is-open');
-        panel.style.display = 'none';
-      }
+      panel.classList.toggle('is-open', open);
       label.textContent = open ? '− details' : '+ details';
     });
   });

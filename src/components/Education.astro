@@ -22,7 +22,7 @@ const education = [
     abbrev: 'SCH',
     location: 'Asan-si, South Korea',
     period: 'Feb 2023 – Feb 2025',
-    gpa: '4.2 / 4.5 (≈ 3.73 / 4.0 US)',
+    gpa: '4.2/4.5 (≈ 3.73/4.0 US)',
     thesis: 'Deep Learning-based Approaches for Intrusion Detection in the In-vehicle Network and Smart Grids',
     note: null,
     award: '3rd place LISATHON, Dec 2024',
@@ -35,9 +35,9 @@ const education = [
     abbrev: 'HCMUS',
     location: 'Ho Chi Minh City, Vietnam',
     period: 'Aug 2017 – Aug 2021',
-    gpa: '3.5 / 4.0 — Top GPA, Computer Network faculty',
+    gpa: '3.5/4.0 — Top GPA, Computer Network faculty',
     thesis: '"Audio injection on controllable systems" — 10/10 (A+)',
-    note: 'Adversarial manipulation of embedded systems predates ML research by 4 years.',
+    // note: 'Adversarial manipulation of embedded systems predates ML research by 4 years.',
     award: 'Top GPA, Computer Network faculty (Aug 2021)',
     current: false,
   },
@@ -53,7 +53,7 @@ const education = [
         <div data-reveal class={`tl-row${edu.current ? ' tl-current' : ''}`}>
           <div class="tl-gutter">
             <div class="tl-dot"></div>
-            {i < education.length - 1 && <div class="tl-line"></div>}
+            <div class="tl-line"></div>
           </div>
           <div class="tl-body">
             <!-- Period + location -->

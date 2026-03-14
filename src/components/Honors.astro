@@ -31,12 +31,11 @@ const honors = [
 
     <div>
       {honors.map(h => (
-        <div data-reveal class="flat-row">
-          <div>
-            <span style="font-size:0.9rem;font-weight:500;">{h.award}</span>
-            <span class="meta honor-org" style="margin-left:0.5rem;">· {h.org}</span>
-          </div>
-          <span class="meta" style="flex-shrink:0;">{h.date}</span>
+        <div data-reveal class="flat-row honor-row">
+          <span class="honor-title">{h.award}</span>
+          <span class="honor-sep"> · </span>
+          <span class="meta honor-org">{h.org}</span>
+          <span class="meta honor-date">{h.date}</span>
         </div>
       ))}
     </div>
@@ -44,9 +43,29 @@ const honors = [
 </section>
 
 <style>
+  .honor-row {
+    justify-content: flex-start;
+    gap: 0;
+  }
+  .honor-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .honor-sep {
+    color: var(--color-muted);
+    padding: 0 0.05rem;
+  }
+  .honor-date {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
   @media (max-width: 640px) {
-    .honor-org {
-      margin-left: 0 !important;
+    .honor-title {
+      flex-basis: 100%;
+    }
+    .honor-sep {
+      display: none;
     }
   }
 </style>

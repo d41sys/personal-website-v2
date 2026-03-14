@@ -132,29 +132,32 @@ const DEFAULT_VISIBLE = 2;
   .scholar-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .scholar-link:hover {
-    transform: translateX(4px);
+    gap: 0;
   }
 
   .scholar-icon {
+    max-width: 0;
+    overflow: hidden;
     opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 0.2s, transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     flex-shrink: 0;
+    margin-right: 0;
+    transition: max-width 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                margin-right 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                opacity 0.2s ease;
   }
 
   .scholar-link:hover .scholar-icon {
+    max-width: 13px;
+    margin-right: 0.3rem;
     opacity: 1;
-    transform: translateY(0);
   }
 
   @media (hover: none) {
-    .scholar-link:hover              { transform: none !important; }
-    .scholar-link:hover .scholar-icon { opacity: 0 !important; transform: translateY(4px) !important; }
+    .scholar-link:hover .scholar-icon {
+      max-width: 0 !important;
+      margin-right: 0 !important;
+      opacity: 0 !important;
+    }
   }
 
   @media (max-width: 640px) {
