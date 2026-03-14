@@ -1,0 +1,22 @@
+# Technical Skills — Tien-Dat Le
+# Last updated: Mar 2026
+
+- id: "programming"
+  area: "Programming"
+  items: ["Python", "C/C++", "Java", "JavaScript"]
+  sortOrder: 1
+
+- id: "ml"
+  area: "ML / Deep Learning"
+  items: ["PyTorch", "scikit-learn", "HuggingFace Transformers", "NumPy", "Pandas"]
+  sortOrder: 2
+
+- id: "security"
+  area: "Security"
+  items: ["Penetration testing", "OWASP audits", "Vulnerability analysis", "Wireshark"]
+  sortOrder: 3
+
+- id: "specialized"
+  area: "Specialized"
+  items: ["CAN bus / IDS protocols", "MQTT", "Linux", "Docker", "Git", "LaTeX"]
+  sortOrder: 4

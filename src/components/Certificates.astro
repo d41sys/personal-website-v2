@@ -1,65 +1,78 @@
 ---
+import { getCollection } from 'astro:content';
 import SectionHeading from './SectionHeading.astro';
 import { Icon } from 'astro-icon/components';
+import { byDateDesc } from '../utils/date';
 
-const certificates = [
-  {
-    name: 'Machine Learning',
-    issuer: 'Coursera / DeepLearning.AI',
-    date: 'Jan 2023',
-    url: '#', // TODO: add certificate link
-  },
-  {
-    name: 'Machine Learning in Production',
-    issuer: 'Coursera / DeepLearning.AI',
-    date: 'Jan 2023',
-    url: '#',
-  },
-  {
-    name: 'Full Stack Application Development Capstone Project',
-    issuer: 'Coursera / IBM',
-    date: 'Jan 2023',
-    url: '#',
-  },
-  {
-    name: 'Developing Back-End Apps with Node.js and Express',
-    issuer: 'Coursera / IBM',
-    date: 'Dec 2022',
-    url: '#',
-  },
-];
+const allCerts = await getCollection('certificates');
+const certificates = allCerts.map(e => e.data).sort(byDateDesc);
+
+const PER_PAGE = 4;
 ---
 
 <section id="certificates">
   <div class="container">
     <SectionHeading title="Certificates" />
 
-    <div>
-      {certificates.map(cert => (
-        <div data-reveal class="flat-row cert-row">
+    <div id="cert-list" data-per-page={PER_PAGE}>
+      {certificates.map((cert, i) => (
+        <div
+          data-reveal
+          class={`flat-row cert-row${i >= PER_PAGE ? ' cert-hidden' : ''}`}
+        >
           <span class="cert-name">{cert.name}</span>
           <span class="cert-sep"> · </span>
           <span class="meta cert-issuer">{cert.issuer}</span>
           <div class="cert-meta">
             <span class="meta">{cert.date}</span>
-            <a
-              href={cert.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`View ${cert.name} certificate`}
-              title="View certificate"
-              class="cert-link"
-            >
-              <Icon name="lucide:external-link" width={13} height={13} />
-            </a>
+            {cert.url && (
+              <a
+                href={cert.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`View ${cert.name} certificate`}
+                title="View certificate"
+                class="cert-link"
+              >
+                <Icon name="lucide:external-link" width={13} height={13} />
+              </a>
+            )}
           </div>
         </div>
       ))}
     </div>
+
+    {certificates.length > PER_PAGE && (
+      <div class="cert-pagination">
+        <button id="cert-prev" class="cert-page-btn" aria-label="Previous page" disabled>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <span id="cert-page-indicator" class="cert-page-indicator">01 / {String(Math.ceil(certificates.length / PER_PAGE)).padStart(2, '0')}</span>
+        <button id="cert-next" class="cert-page-btn" aria-label="Next page">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    )}
   </div>
 </section>
 
+<script src="../scripts/certificates.ts"></script>
+
 <style>
+  .cert-row.cert-hidden { display: none; }
+
+  #cert-list {
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+  #cert-list.cert-paging {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
   .cert-row {
     justify-content: flex-start;
     gap: 0;
@@ -90,12 +103,48 @@ const certificates = [
     color: var(--color-accent);
   }
 
+  /* ── Pagination ── */
+  .cert-pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .cert-page-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    background: none;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .cert-page-btn:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .cert-page-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .cert-page-indicator {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-muted);
+    letter-spacing: 0.06em;
+    min-width: 3rem;
+    text-align: center;
+  }
+
   @media (max-width: 640px) {
-    .cert-name {
-      flex-basis: 100%;
-    }
-    .cert-sep {
-      display: none;
-    }
+    .cert-name { flex-basis: 100%; }
+    .cert-sep  { display: none; }
   }
 </style>

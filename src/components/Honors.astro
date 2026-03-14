@@ -1,28 +1,10 @@
 ---
+import { getCollection } from 'astro:content';
 import SectionHeading from './SectionHeading.astro';
+import { byDateDesc } from '../utils/date';
 
-const honors = [
-  {
-    award: '3rd Place — LISATHON (LISA Lab Hackathon)',
-    date: 'Dec 2024',
-    org: 'Soonchunhyang University',
-  },
-  {
-    award: 'Top Highest GPA — Computer Network Faculty',
-    date: 'Aug 2021',
-    org: 'HCMUS, Vietnam National University',
-  },
-  {
-    award: 'TOP 7 — HCMUS-CTF Final (Capture the Flag)',
-    date: 'May 2020',
-    org: 'HCMUS, Vietnam National University',
-  },
-  {
-    award: 'MCSA Certification Scholarship for Excellent Students',
-    date: 'Jan 2020',
-    org: 'SaigonCTT',
-  },
-];
+const allHonors = await getCollection('honors');
+const honors = allHonors.map(e => e.data).sort(byDateDesc);
 ---
 
 <section id="honors">

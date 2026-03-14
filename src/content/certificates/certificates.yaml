@@ -1,0 +1,68 @@
+# Certificates — Tien-Dat Le
+# Last updated: Mar 2026
+
+- id: "claude-code"
+  name: "Claude Code in Action"
+  issuer: "Anthropic"
+  date: "Feb 2026"
+  url: "https://www.anthropic.com"
+
+- id: "ibm-fullstack"
+  name: "IBM Full Stack Software Developer Specialization"
+  issuer: "Coursera / IBM"
+  date: "Jan 2023"
+  url: "https://www.coursera.org/account/accomplishments/certificate/TNEZYPBGCCN3"
+
+- id: "ibm-cybersecurity"
+  name: "IBM Cybersecurity Analyst Specialization"
+  issuer: "Coursera / IBM"
+  date: "Dec 2022"
+  url: "https://www.coursera.org/account/accomplishments/certificate/V8E6F642RKJA"
+
+- id: "infosec-js"
+  name: "INFOSEC JavaScript Security Specialization"
+  issuer: "Coursera / INFOSEC"
+  date: "Dec 2022"
+  url: "https://www.coursera.org/account/accomplishments/certificate/8FFXR6PWPHBS"
+
+- id: "pentest-forensics"
+  name: "Penetration Testing, Incident Response and Forensics"
+  issuer: "Coursera / IBM"
+  date: "Nov 2022"
+  url: "https://www.coursera.org/account/accomplishments/certificate/XVQRH73YC5SB"
+
+- id: "network-security"
+  name: "Network Security & Database Vulnerabilities"
+  issuer: "Coursera / IBM"
+  date: "Aug 2022"
+  url: "https://www.coursera.org/account/accomplishments/certificate/8ZRFMZ368SQ5"
+
+- id: "cyber-compliance"
+  name: "Cybersecurity Compliance Framework & System Administration"
+  issuer: "Coursera / IBM"
+  date: "Aug 2022"
+  url: "https://www.coursera.org/account/accomplishments/certificate/Y2ASSNB4CPG2"
+
+- id: "owasp-zap"
+  name: "Web Application Security Testing with OWASP ZAP"
+  issuer: "Coursera / IBM"
+  date: "Aug 2022"
+  url: "https://www.coursera.org/account/accomplishments/certificate/4QTP3JS5QGZM"
+
+- id: "aws-s3"
+  name: "AWS S3 Basics"
+  issuer: "Coursera / AWS"
+  date: "Aug 2022"
+  url: "https://www.coursera.org/account/accomplishments/certificate/DTTPYG9E9YDV"
+
+- id: "wireshark"
+  name: "Wireshark for Basic Network Security Analysis"
+  issuer: "Coursera / IBM"
+  date: "Jan 2022"
+  url: "https://www.coursera.org/account/accomplishments/certificate/R5NLKATFCPGT"
+
+- id: "advent-cyber-2021"
+  name: "Advent of Cyber 2021"
+  issuer: "TryHackMe"
+  date: "Dec 2021"
+  url: "https://tryhackme.com/certificate/THM-K8BPVP6PCX"

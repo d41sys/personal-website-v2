@@ -1,0 +1,27 @@
+# Peer Review Service — Tien-Dat Le
+# Last updated: Mar 2026
+
+- id: "ieee-tifs"
+  journal: "IEEE Trans on Information Forensics and Security"
+  count: 4
+  sortOrder: 1
+
+- id: "scientific-reports"
+  journal: "Scientific Reports"
+  count: 2
+  sortOrder: 2
+
+- id: "cluster-computing"
+  journal: "Cluster Computing"
+  count: 2
+  sortOrder: 3
+
+- id: "ieee-network"
+  journal: "IEEE Network"
+  count: 1
+  sortOrder: 4
+
+- id: "ieee-tii"
+  journal: "IEEE Transactions on Industrial Informatics"
+  count: 1
+  sortOrder: 5

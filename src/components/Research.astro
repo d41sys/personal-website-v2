@@ -1,5 +1,15 @@
 ---
+import { getCollection } from 'astro:content';
 import SectionHeading from './SectionHeading.astro';
+import { formatText } from '../utils/format';
+
+const allInterests = await getCollection('research-interests');
+const interests = allInterests
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map(e => e.data.label);
+
+const allIntro = await getCollection('research-intro');
+const { paragraphs } = allIntro[0].data;
 ---
 
 <section id="research">
@@ -7,29 +17,18 @@ import SectionHeading from './SectionHeading.astro';
     <SectionHeading title="Research" />
 
     <div data-reveal>
-      <p style="line-height: 1.8; margin-bottom: 1.25rem;">
-        My research sits at the intersection of <strong>time series anomaly detection</strong>,
-        <strong>AI security / adversarial ML</strong>, and
-        <strong>critical infrastructure security</strong> — specifically in-vehicle networks,
-        power grids, and IoT systems.
-      </p>
-      <p style="line-height: 1.8; color: var(--color-muted); font-size: 0.95rem;">
-        I build models that are not just accurate, but certifiably robust when deployed under
-        adversarial conditions. The through-line: offensive security intuitions applied to
-        ML threat modeling, from a background of finding real vulnerabilities at scale.
-      </p>
+      {paragraphs.map((p, i) => (
+        <p
+          style={`line-height: 1.8;${p.muted ? ' color: var(--color-muted); font-size: 0.95rem;' : ''}${i < paragraphs.length - 1 ? ' margin-bottom: 1.25rem;' : ''}`}
+          set:html={formatText(p.text)}
+        />
+      ))}
     </div>
 
     <!-- Research interests tags -->
     <div data-reveal style="margin-top: 1.75rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-      {[
-        'Adversarial ML',
-        'Anomaly Detection',
-        'Intrusion Detection',
-        'Critical Infrastructure',
-        'Federated Learning',
-      ].map(tag => (
-        <span class="tag">{tag}</span>
+      {interests.map(label => (
+        <span class="tag">{label}</span>
       ))}
     </div>
   </div>

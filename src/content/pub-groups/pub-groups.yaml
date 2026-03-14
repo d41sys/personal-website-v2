@@ -1,0 +1,22 @@
+# Publication category groups — display order and labels
+# key must match the `category` enum in publications.yaml
+
+- id: "first-author"
+  key: "first-author"
+  label: "First Author"
+  sortOrder: 1
+
+- id: "contributing"
+  key: "contributing"
+  label: "Contributing Author"
+  sortOrder: 2
+
+- id: "workshop"
+  key: "workshop"
+  label: "Workshop / Conference"
+  sortOrder: 3
+
+- id: "under-review"
+  key: "under-review"
+  label: "Under Review"
+  sortOrder: 4

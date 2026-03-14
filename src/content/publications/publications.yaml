@@ -41,7 +41,7 @@
   authors: "T.H.B.Huy, **T.D.Le**, P.Van Phu, S.Park, D.Kim"
   journal: "Journal of Energy Storage 88, 111506 — Q1"
   year: 2024
-  doi: ""
+  doi: "10.1016/j.est.2024.111506"
   citations: 30
   topic: "Microgrid energy management, supervised learning, real-time optimization"
   sortOrder: 4
@@ -52,7 +52,7 @@
   authors: "T.H.B.Huy, N.T.M.Duy, P.Van Phu, **T.D.Le**, S.Park, D.Kim"
   journal: "Applied Energy 373, 123847 — Q1"
   year: 2024
-  doi: ""
+  doi: "10.1016/j.apenergy.2024.123847"
   citations: 26
   topic: "Hydrogen energy systems, GAN-based imitation learning, robust energy management"
   sortOrder: 5
@@ -63,7 +63,7 @@
   authors: "T.H.Tran, **T.D.Le**, T.H.B.Huy, D.Kim"
   journal: "Knowledge-Based Systems, 114716 — Q1"
   year: 2025
-  doi: ""
+  doi: "10.1016/j.knosys.2025.114716"
   citations: 0
   topic: "In-vehicle IDS, EfficientNet, contrastive learning, transfer learning"
   sortOrder: 6
@@ -74,7 +74,7 @@
   authors: "N.T.M.Duy, T.H.B.Huy, P.Van Phu, **T.D.Le**, D.Kim"
   journal: "Knowledge-Based Systems, 114436 — Q1"
   year: 2025
-  doi: ""
+  doi: "10.1016/j.knosys.2025.114436"
   citations: 0
   topic: "In-vehicle IDS, few-shot learning, convolutional anomaly transformer"
   sortOrder: 7
@@ -86,7 +86,7 @@
   authors: "P.V.Phu, T.H.B.Huy, **T.D.Le**, T.D.Le, S.Park, D.Kim"
   journal: "International Journal of Energy Research 2026 (1), 1046502 — Q1"
   year: 2026
-  doi: ""
+  doi: "10.1155/er/1046502"
   citations: 0
   topic: "Multi-objective energy management, small modular reactors, uncertainty handling"
   sortOrder: 8
@@ -97,7 +97,7 @@
   authors: "T.H.B.Huy, **T.D.Le**, P.Van Phu, D.Kim"
   journal: "Journal of Energy Storage 95, 112584 — Q1"
   year: 2024
-  doi: ""
+  doi: "10.1016/j.est.2024.112584"
   citations: 0
   topic: "Corrigendum to J.3"
   sortOrder: 9
@@ -108,7 +108,7 @@
   authors: "K.L.Pham, **T.D.Le**, A.D.Tran, M.T.Tran, D.T.Dang-Nguyen"
   journal: "Proceedings of the 1st Workshop on Security-Centric Strategies for Combating Scams"
   year: 2024
-  doi: ""
+  doi: "10.1145/3660512.3665525"
   citations: 0
   topic: "Cybersecurity awareness, social engineering, Vietnamese internet users"
   sortOrder: 10

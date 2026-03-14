@@ -1,0 +1,29 @@
+# News — Tien-Dat Le
+# Last updated: Mar 2026
+# Order: most recent first
+# Tags: paper | position | award | talk | misc
+
+- id: "lisathon-win"
+  date: "Dec 2024"
+  tag: "award"
+  text: "**Award won** at LISATHON (LISA Lab Hackathon), Soonchunhyang University, South Korea."
+
+- id: "engd-start"
+  date: "May 2025"
+  tag: "position"
+  text: "Started EngD track at Eindhoven University of Technology (TU/e), Netherlands."
+
+- id: "paper-eaai-2025"
+  date: "May 2025"
+  tag: "paper"
+  text: "**Paper accepted** at <em>Engineering Applications of Artificial Intelligence</em>: Advanced deep learning-based electricity theft detection in smart grids using multi-dimensional analysis with Convolutional Autoencoder and Transformer."
+
+- id: "paper-kbs-2025-0"
+  date: "Nov 2025"
+  tag: "paper"
+  text: "**Paper accepted** at <em>Knowledge-Based Systems</em>: Multi-class intrusion detection system for in-vehicle networks using few-shot learning and convolutional anomaly transformer network."
+
+- id: "paper-kbs-2025-1"
+  date: "Nov 2025"
+  tag: "paper"
+  text: "**Paper accepted** at <em>Knowledge-Based Systems</em>: EfficientNet-based universum-inspired supervised contrastive learning and transfer learning for in-vehicle intrusion detection systems."

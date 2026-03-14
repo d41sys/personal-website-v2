@@ -1,22 +1,17 @@
 ---
 import { getCollection } from 'astro:content';
 import SectionHeading from './SectionHeading.astro';
+import { formatText } from '../utils/format';
 
 const allPubs = await getCollection('publications');
-const sorted = allPubs.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+const sorted = allPubs.sort((a, b) => b.data.year - a.data.year);
 
-const groups = [
-  { key: 'first-author', label: 'First Author' },
-  { key: 'contributing', label: 'Contributing Author' },
-  { key: 'workshop', label: 'Workshop / Conference' },
-  { key: 'under-review', label: 'Under Review' },
-];
+const allGroups = await getCollection('pub-groups');
+const groups = allGroups
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map(e => e.data);
 
 const totalCitations = sorted.reduce((sum, p) => sum + (p.data.citations ?? 0), 0);
-
-function formatAuthors(str: string): string {
-  return str.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-}
 
 const DEFAULT_VISIBLE = 2;
 ---
@@ -93,7 +88,7 @@ const DEFAULT_VISIBLE = 2;
                 )}
 
                 <!-- Authors -->
-                <p class="meta" set:html={formatAuthors(pub.data.authors)} style="margin:0 0 0.2rem;"></p>
+                <p class="meta" set:html={formatText(pub.data.authors)} style="margin:0 0 0.2rem;"></p>
                 <!-- Journal + year -->
                 <p class="meta" style="margin:0;">{pub.data.journal}, {pub.data.year}</p>
               </div>
@@ -170,29 +165,4 @@ const DEFAULT_VISIBLE = 2;
   }
 </style>
 
-<script>
-  document.querySelectorAll<HTMLButtonElement>('.view-more-btn[data-pub-target]').forEach(btn => {
-    const target = btn.dataset.pubTarget!;
-    const label = btn.querySelector('.pub-btn-label') as HTMLElement;
-    let expanded = false;
-
-    btn.addEventListener('click', () => {
-      expanded = !expanded;
-      const defaultVisible = parseInt(btn.dataset.default ?? '2');
-      document.querySelectorAll<HTMLElement>(`.pub-entry[data-pub-group="${target}"]`).forEach(el => {
-        const idx = parseInt(el.dataset.pubIndex ?? '0');
-        if (idx < defaultVisible) return;
-        if (expanded) {
-          el.classList.remove('pub-hidden');
-          el.classList.add('pub-revealing');
-          el.addEventListener('animationend', () => el.classList.remove('pub-revealing'), { once: true });
-        } else {
-          el.classList.add('pub-hidden');
-        }
-      });
-      label.textContent = expanded
-        ? 'Show less'
-        : `Show ${btn.dataset.extra} more`;
-    });
-  });
-</script>
+<script src="../scripts/publications.ts"></script>

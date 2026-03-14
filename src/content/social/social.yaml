@@ -1,0 +1,32 @@
+# Social links — Tien-Dat Le
+# Last updated: Mar 2026
+
+- id: "email"
+  label: "Email"
+  href: "mailto:tiendatt.716@gmail.com"
+  icon: "lucide:mail"
+
+- id: "github"
+  label: "GitHub"
+  href: "https://github.com/d41sys"
+  icon: "simple-icons:github"
+
+- id: "linkedin"
+  label: "LinkedIn"
+  href: "https://www.linkedin.com/in/tien-datle716"
+  icon: "simple-icons:linkedin"
+
+- id: "x"
+  label: "X"
+  href: "https://x.com/d41sy___"
+  icon: "simple-icons:x"
+
+- id: "scholar"
+  label: "Scholar"
+  href: "https://scholar.google.com/citations?user=JU4RyPQAAAAJ&hl=en"
+  icon: "simple-icons:googlescholar"
+
+- id: "orcid"
+  label: "ORCID"
+  href: "https://orcid.org/0009-0005-9484-8444"
+  icon: "simple-icons:orcid"

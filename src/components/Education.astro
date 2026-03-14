@@ -1,47 +1,11 @@
 ---
+import { getCollection } from 'astro:content';
 import SectionHeading from './SectionHeading.astro';
 
-const education = [
-  {
-    flag: '🇳🇱',
-    degree: 'Engineering Doctorate (EngD), Electrical Engineering',
-    institution: 'Eindhoven University of Technology (TU/e)',
-    abbrev: 'TU/e',
-    location: 'Eindhoven, Netherlands',
-    period: 'May 2025 – Present',
-    gpa: null,
-    thesis: null,
-    note: 'Funded industry-linked research programme. Project: DigiRES',
-    award: null,
-    current: true,
-  },
-  {
-    flag: '🇰🇷',
-    degree: 'Master of Research, Mobility Security Convergence',
-    institution: 'Soonchunhyang University',
-    abbrev: 'SCH',
-    location: 'Asan-si, South Korea',
-    period: 'Feb 2023 – Feb 2025',
-    gpa: '4.2/4.5 (≈ 3.73/4.0 US)',
-    thesis: 'Deep Learning-based Approaches for Intrusion Detection in the In-vehicle Network and Smart Grids',
-    note: null,
-    award: '3rd place LISATHON, Dec 2024',
-    current: false,
-  },
-  {
-    flag: '🇻🇳',
-    degree: 'Bachelor of Information Technology (Computer Network & Telecommunication)',
-    institution: 'Ho Chi Minh City University of Science (HCMUS) — VNU',
-    abbrev: 'HCMUS',
-    location: 'Ho Chi Minh City, Vietnam',
-    period: 'Aug 2017 – Aug 2021',
-    gpa: '3.5/4.0 — Top GPA, Computer Network faculty',
-    thesis: '"Audio injection on controllable systems" — 10/10 (A+)',
-    // note: 'Adversarial manipulation of embedded systems predates ML research by 4 years.',
-    award: 'Top GPA, Computer Network faculty (Aug 2021)',
-    current: false,
-  },
-];
+const allEducation = await getCollection('education');
+const education = allEducation
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map(e => e.data);
 ---
 
 <section id="education">

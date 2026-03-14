@@ -1,0 +1,22 @@
+# Research interests — Tien-Dat Le
+# Last updated: Mar 2026
+
+- id: "adversarial-ml"
+  label: "Adversarial ML"
+  sortOrder: 1
+
+- id: "anomaly-detection"
+  label: "Anomaly Detection"
+  sortOrder: 2
+
+- id: "intrusion-detection"
+  label: "Intrusion Detection"
+  sortOrder: 3
+
+- id: "critical-infrastructure"
+  label: "Critical Infrastructure"
+  sortOrder: 4
+
+- id: "federated-learning"
+  label: "Federated Learning"
+  sortOrder: 5

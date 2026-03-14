@@ -1,16 +1,10 @@
 ---
+import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 
 const year = new Date().getFullYear();
-
-const socialLinks = [
-  { label: 'Email',    href: 'mailto:tiendatt.716@gmail.com',                                icon: 'lucide:mail' },
-  { label: 'GitHub',   href: 'https://github.com/d41sys',                                    icon: 'simple-icons:github' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tien-datle716',                    icon: 'simple-icons:linkedin' },
-  { label: 'X',        href: 'https://x.com/d41sy___',                                       icon: 'simple-icons:x' },
-  { label: 'Scholar',  href: 'https://scholar.google.com/citations?user=JU4RyPQAAAAJ&hl=en', icon: 'simple-icons:googlescholar' },
-  { label: 'ORCID',   href: 'https://orcid.org/0009-0005-9484-8444',                       icon: 'simple-icons:orcid' },
-];
+const allSocial = await getCollection('social');
+const socialLinks = allSocial.map(e => e.data);
 ---
 
 <footer style="padding: 3rem 0 2rem;">

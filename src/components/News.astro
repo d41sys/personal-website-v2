@@ -1,0 +1,202 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeading from './SectionHeading.astro';
+import { byDateDesc } from '../utils/date';
+import { formatText } from '../utils/format';
+
+const allNews = await getCollection('news');
+const news = allNews.map(e => e.data).sort(byDateDesc);
+
+const DEFAULT_VISIBLE = 3;
+const hasMore = news.length > DEFAULT_VISIBLE;
+---
+
+{news.length > 0 && (
+  <section id="news">
+    <div class="container">
+      <SectionHeading title="News" />
+
+      <ol class="news-list" reversed>
+        {news.map((item, i) => (
+          <li
+            data-reveal
+            data-news-index={i}
+            class={`news-item${i >= DEFAULT_VISIBLE ? ' news-hidden' : ''}`}
+          >
+            <time class="news-date">{item.date}</time>
+            <span class={`news-tag news-tag--${item.tag}`}>{item.tag}</span>
+            <span class="news-text">
+              {item.link
+                ? <a href={item.link} target="_blank" rel="noopener noreferrer" set:html={formatText(item.text)} />
+                : <Fragment set:html={formatText(item.text)} />
+              }
+            </span>
+          </li>
+        ))}
+      </ol>
+
+      {hasMore && (
+        <button
+          class="view-more-btn news-more-btn"
+          data-default={DEFAULT_VISIBLE}
+          data-extra={news.length - DEFAULT_VISIBLE}
+        >
+          <span class="news-btn-label">Show {news.length - DEFAULT_VISIBLE} more</span>
+        </button>
+      )}
+    </div>
+  </section>
+)}
+
+<script src="../scripts/news.ts"></script>
+
+<style>
+  .news-item.news-hidden { display: none; }
+
+  @keyframes newsReveal {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .news-revealing {
+    animation: newsReveal 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .news-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .news-item {
+    display: grid;
+    grid-template-columns: 5.5rem 5rem 1fr;
+    align-items: baseline;
+    gap: 0 0.875rem;
+    padding: 0.65rem 0.35rem;
+    border-bottom: 1px solid var(--color-border);
+    border-left: 2px solid transparent;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    transition: padding-left 0.15s, border-left-color 0.15s;
+  }
+
+  .news-item:hover {
+    padding-left: 0.65rem;
+    border-left-color: var(--color-accent);
+  }
+
+  .news-date {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: top;
+  }
+
+  .news-tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.4rem;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+    justify-self: start;
+    align-self: top;
+    cursor: default;
+    transition: background-color 0.15s, color 0.15s;
+  }
+
+  .news-tag--paper:hover   { background-color: var(--color-accent); color: #fff; }
+  .news-tag--position:hover { background-color: #059669; color: #fff; }
+  [data-theme="dark"] .news-tag--position:hover { background-color: #34d399; color: #161618; }
+  .news-tag--award:hover   { background-color: #d97706; color: #fff; }
+  [data-theme="dark"] .news-tag--award:hover { background-color: #fbbf24; color: #161618; }
+  .news-tag--talk:hover    { background-color: #7c3aed; color: #fff; }
+  [data-theme="dark"] .news-tag--talk:hover { background-color: #a78bfa; color: #161618; }
+  .news-tag--misc:hover    { background-color: var(--color-muted); color: var(--color-bg); }
+
+  .news-tag--paper   { color: var(--color-accent); }
+  .news-tag--position { color: #059669; }
+  [data-theme="dark"] .news-tag--position { color: #34d399; }
+  .news-tag--award   { color: #d97706; }
+  [data-theme="dark"] .news-tag--award { color: #fbbf24; }
+  .news-tag--talk    { color: #7c3aed; }
+  [data-theme="dark"] .news-tag--talk { color: #a78bfa; }
+  .news-tag--misc    { color: var(--color-muted); }
+
+  .news-text {
+    color: var(--color-text);
+    font-size: 0.88rem;
+    line-height: 1.65;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .news-item:hover .news-text {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+  }
+
+  .news-text :global(strong) {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .news-text a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .news-text a:hover {
+    color: var(--color-accent);
+  }
+
+  /* ── No hover (touch) — tap to expand ──────────────── */
+  @media (hover: none) {
+    .news-item { cursor: pointer; }
+    .news-item:hover {
+      padding-left: 0.35rem;
+      border-left-color: transparent;
+    }
+    .news-item.is-expanded .news-text {
+      -webkit-line-clamp: unset;
+      overflow: visible;
+    }
+  }
+
+  /* ── Mobile layout ──────────────────────────────────── */
+  @media (max-width: 640px) {
+    .news-item {
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+      row-gap: 0.3rem;
+      column-gap: 0.6rem;
+      padding: 0.75rem 0.35rem;
+    }
+
+    .news-date {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .news-tag {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .news-text {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      font-size: 0.875rem;
+    }
+  }
+</style>

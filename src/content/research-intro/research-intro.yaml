@@ -1,0 +1,9 @@
+# Research intro paragraphs — Tien-Dat Le
+# Last updated: Mar 2026
+
+- id: "main"
+  paragraphs:
+    - text: "My research sits at the intersection of **time series anomaly detection**, **AI security / adversarial ML**, and **critical infrastructure security** — specifically [in-vehicle networks](https://scholar.google.com/citations?user=JU4RyPQAAAAJ&hl=en), power grids, and IoT systems."
+      muted: false
+    - text: "I build models that are not just accurate, but certifiably robust when deployed under adversarial conditions. The through-line: offensive security intuitions applied to ML threat modeling, from a background of finding real vulnerabilities at scale."
+      muted: true

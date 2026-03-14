@@ -1,32 +1,18 @@
 ---
+import { getCollection } from 'astro:content';
 import SectionHeading from './SectionHeading.astro';
 
-const skills = [
-  {
-    area: 'Programming',
-    items: ['Python', 'C/C++', 'Java', 'JavaScript'],
-  },
-  {
-    area: 'ML / Deep Learning',
-    items: ['PyTorch', 'scikit-learn', 'HuggingFace Transformers', 'NumPy', 'Pandas'],
-  },
-  {
-    area: 'Security',
-    items: ['Penetration testing', 'OWASP audits', 'Vulnerability analysis', 'Wireshark'],
-  },
-  {
-    area: 'Specialized',
-    items: ['CAN bus / IDS protocols', 'MQTT', 'Linux', 'Docker', 'Git', 'LaTeX'],
-  },
-];
+const allSkills = await getCollection('skills');
+const skills = allSkills
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map(e => e.data);
 
-const peerReview = [
-  { journal: 'IEEE Transactions on Information Forensics and Security', count: 4 },
-  { journal: 'Scientific Reports', count: 2 },
-  { journal: 'Cluster Computing', count: 2 },
-  { journal: 'IEEE Network', count: 1 },
-  { journal: 'IEEE Transactions on Industrial Informatics', count: 1 },
-];
+const allPeerReview = await getCollection('peer-review');
+const peerReview = allPeerReview
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map(e => e.data);
+
+const totalReviews = peerReview.reduce((sum, r) => sum + r.count, 0);
 ---
 
 <section id="skills">
@@ -54,7 +40,7 @@ const peerReview = [
       <!-- Peer Review -->
       <div data-reveal>
         <h3 style="font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.6;margin-bottom:1.25rem;">Peer Review Service</h3>
-        <p class="meta" style="margin-bottom:1rem;">10 reviews · 5 journals</p>
+        <p class="meta" style="margin-bottom:1rem;">{totalReviews} reviews · {peerReview.length} journals</p>
         <div style="display:flex;flex-direction:column;">
           {peerReview.map(item => (
             <div class="peer-row">
