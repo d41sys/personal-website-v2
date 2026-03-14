@@ -1,0 +1,74 @@
+# Experience — Tien-Dat Le
+# Last updated: Mar 2026
+
+- id: "innova"
+  type: "industry"
+  title: "AI Engineer Intern"
+  organization: "Innova Energie"
+  location: "Netherlands"
+  period: "Sep 2025 – Present"
+  description:
+    - "Developing AI-powered forecasting models for energy demand and renewable production prediction"
+    - "Integrating machine learning pipelines with operational energy management systems"
+    - "Benchmarking classical time-series models against deep learning approaches for short-term load forecasting"
+  sortOrder: 1
+
+- id: "digires"
+  type: "research"
+  title: "AI Engineer"
+  organization: "DigiPES Lab, Eindhoven University of Technology (TU/e)"
+  location: "Eindhoven, The Netherlands"
+  period: "May 2025 – Present"
+  description:
+    - "Developing an Integrated Digital Platform for Multi-Energy Flexibility Asset Orchestration"
+    - "IoT-enabled asset integration combining edge computing with cloud analytics for real-time energy management"
+    - "Multi-objective optimization balancing technical, economic, and environmental constraints"
+    - "Digital twin architectures for simulating regional energy network scenarios"
+  sortOrder: 2
+
+- id: "sch"
+  type: "research"
+  title: "AI Researcher"
+  organization: "IoT Network Lab, Soonchunhyang University"
+  location: "Asan-si, South Korea"
+  period: "Feb 2023 – Feb 2025"
+  projects:
+    - title: "GAN-based In-Vehicle IDS"
+      period: "2024 – Feb 2025"
+      description:
+        - "Multiclass classification using vision transformer + GAN (Auxiliary Classifier) for CAN bus anomaly detection"
+        - "Federated learning integration for privacy-preserving intrusion detection"
+        - "Target venue: IEEE TIFS (submitted 2026, under review)"
+      output: "S.1"
+    - title: "Multi-classification In-Vehicle IDS"
+      period: "Feb 2023 – 2024"
+      description:
+        - "Transformer + autoencoder architecture for CAN bus traffic analysis"
+        - "Achieved classification accuracy = 1.0 on benchmark datasets"
+      output: "J.1"
+    - title: "AI-based Electricity Theft Detection"
+      period: "Feb 2023 – 2024"
+      description:
+        - "Transformer + convolutional autoencoder for smart grid anomaly detection"
+        - "Achieved accuracy 0.9918 — state-of-the-art at time of publication"
+      output: "J.2"
+  sortOrder: 3
+
+- id: "zalo"
+  type: "industry"
+  title: "Safety & Security"
+  organization: "Zalo — VNG Corporation"
+  location: "Ho Chi Minh City, Vietnam"
+  period: "Aug 2021 – Feb 2023"
+  projects:
+    - title: "Safety and Security Executive"
+      period: "Mar 2022 – Feb 2023"
+      description:
+        - "Conducted OWASP security audits of internal tools and external messaging platforms"
+        - "Identified and reported 5+ critical vulnerabilities affecting millions of users"
+    - title: "Safety & Security Fresher"
+      period: "Aug 2021 – Feb 2022"
+      description:
+        - "Vietnam's most-used messaging platform — 70+ million users"
+        - "Developed custom penetration testing platforms using JavaScript and Python (packet decryption, data visualization)"
+  sortOrder: 4

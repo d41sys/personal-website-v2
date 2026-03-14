@@ -1,0 +1,162 @@
+---
+import { Icon } from "astro-icon/components";
+
+const socialLinks = [
+  {
+    label: "Email",
+    href: "mailto:tiendatt.716@gmail.com",
+    icon: "lucide:mail",
+  },
+  {
+    label: "GitHub",
+    href: "https://github.com/d41sys",
+    icon: "simple-icons:github",
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/tien-datle716",
+    icon: "simple-icons:linkedin",
+  },
+  { label: "X", href: "https://x.com/d41sy___", icon: "simple-icons:x" },
+  {
+    label: "Scholar",
+    href: "https://scholar.google.com/citations?user=JU4RyPQAAAAJ&hl=en",
+    icon: "simple-icons:googlescholar",
+  },
+  {
+    label: "ORCID",
+    href: "https://orcid.org/0009-0005-4877-3200",
+    icon: "simple-icons:orcid",
+  },
+];
+---
+
+<section id="top" style="padding: 5rem 0 4rem; border-top: none;">
+  <div class="container">
+    <div
+      style="
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 3rem;
+      align-items: stretch;
+    "
+    >
+      <!-- Left: profile photo -->
+      <div data-reveal style="flex-shrink: 0; display: flex;">
+        <div
+          style="
+          width: 16rem;
+          height: 100%;
+          min-height: 9rem;
+          overflow: hidden;
+          border: 1px solid var(--color-border);
+          border-radius: 6px;
+          background-color: var(--color-surface);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+        >
+          <img
+            src="/profile.jpg"
+            alt="Tien-Dat Le"
+            width="256"
+            height="320"
+            style="width:100%;height:100%;object-fit:cover;display:block;"
+            onerror="this.style.display='none';this.parentElement.querySelector('.photo-placeholder').style.display='flex';"
+          />
+          <div
+            class="photo-placeholder"
+            style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:0.25rem;"
+          >
+            <span
+              style="font-family:var(--font-mono);font-size:1.5rem;font-weight:700;opacity:0.15;"
+              >TDL</span
+            >
+            <span
+              style="font-family:var(--font-mono);font-size:0.6rem;opacity:0.35;text-align:center;padding:0 0.5rem;"
+              >add profile.jpg<br />to public/</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: text content -->
+      <div>
+        <!-- Name -->
+        <div data-reveal>
+          <h1 style="margin-bottom: 0.5rem;">Tien-Dat Le</h1>
+        </div>
+
+        <!-- Role + flag -->
+        <div data-reveal style="margin-bottom: 1rem;">
+          <p
+            style="font-size: 0.95rem; color: var(--color-muted); font-weight: 400; margin-bottom: 0.25rem;"
+          >
+            🇳🇱 EngD Researcher · Eindhoven University of Technology
+          </p>
+          <p
+            style="font-size: 1rem; font-weight: 500; line-height: 1.5; max-width: 36rem;"
+          >
+            Adversarially robust ML for safety-critical systems.
+          </p>
+        </div>
+
+        <!-- Story / narrative arc -->
+        <div data-reveal style="margin-bottom: 1.75rem;">
+          <p
+            style="font-size: 0.9rem; color: var(--color-muted); max-width: 40rem; line-height: 1.75;"
+          >
+            🇻🇳 Vietnam — security practitioner at Zalo (70M users, 5+ critical
+            vulns) · 🇰🇷 Korea — built ML-based IDS with accuracy = 1.0 · 🇳🇱
+            Netherlands — now asking how to certify ML safety in production.
+          </p>
+        </div>
+
+        <!-- Social links -->
+        <div data-reveal style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          {
+            socialLinks.map((link) => (
+              <a
+                href={link.href}
+                target={link.href.startsWith("mailto") ? "_self" : "_blank"}
+                rel="noopener noreferrer"
+                aria-label={link.label}
+                title={link.label}
+                style="
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-family: var(--font-mono);
+                font-size: 0.72rem;
+                font-weight: 400;
+                opacity: 0.6;
+                border: 1px solid var(--color-border);
+                padding: 0.3rem 0.6rem;
+                transition: opacity 0.2s, border-color 0.2s, color 0.2s;
+              "
+                onmouseover="this.style.opacity='1';this.style.borderColor='var(--color-accent)';this.style.color='var(--color-accent)';"
+                onmouseout="this.style.opacity='0.6';this.style.borderColor='var(--color-border)';this.style.color='inherit';"
+              >
+                <Icon name={link.icon} width={13} height={13} />
+                <span>{link.label}</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Collapse to single column on small screens -->
+<style>
+  @media (max-width: 500px) {
+    #top .container > div {
+      grid-template-columns: 1fr !important;
+    }
+    #top .container > div > div:last-child {
+      display: none;
+    }
+  }
+</style>

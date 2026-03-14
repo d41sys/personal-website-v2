@@ -1,0 +1,171 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeading from './SectionHeading.astro';
+
+const allPubs = await getCollection('publications');
+const sorted = allPubs.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const groups = [
+  { key: 'first-author', label: 'First Author' },
+  { key: 'contributing', label: 'Contributing Author' },
+  { key: 'workshop', label: 'Workshop / Conference' },
+  { key: 'under-review', label: 'Under Review' },
+];
+
+const totalCitations = sorted.reduce((sum, p) => sum + (p.data.citations ?? 0), 0);
+
+function formatAuthors(str: string): string {
+  return str.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+}
+
+const DEFAULT_VISIBLE = 2;
+---
+
+<section id="publications">
+  <div class="container">
+    <SectionHeading title="Publications" />
+
+    <div data-reveal style="margin-bottom: 2rem;">
+      <p class="meta">
+        9 published · 1 under review · {totalCitations}+ total citations ·
+        <a
+          href="https://scholar.google.com/citations?user=JU4RyPQAAAAJ&hl=en"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-link scholar-link"
+        >
+          <svg class="scholar-icon" width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M5.242 13.769L0 9.5L12 0l12 9.5l-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269M12 10a7 7 0 1 0 0 14a7 7 0 0 0 0-14"/>
+          </svg>
+          Google Scholar ↗
+        </a>
+      </p>
+    </div>
+
+    {groups.map(group => {
+      const pubs = sorted.filter(p => p.data.category === group.key);
+      if (pubs.length === 0) return null;
+      const hasMore = pubs.length > DEFAULT_VISIBLE;
+      return (
+        <div data-reveal style="margin-bottom: 2.75rem;">
+          <h3 style="
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-bottom: 0;
+          ">
+            {group.label}
+          </h3>
+
+          <div id={`pub-group-${group.key}`}>
+            {pubs.map((pub, i) => (
+              <div
+                class={`pub-entry${i >= DEFAULT_VISIBLE ? ' pub-hidden' : ''}`}
+                data-pub-group={group.key}
+                data-pub-index={i}
+              >
+                <!-- ID tag + citations -->
+                <div style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.45rem;">
+                  <span class={`tag${group.key === 'under-review' ? ' tag-accent' : ''}`}>
+                    [{pub.data.id}]
+                  </span>
+                  {pub.data.citations !== undefined && pub.data.citations > 0 && (
+                    <span class="meta">{pub.data.citations} citations</span>
+                  )}
+                  {group.key === 'under-review' && (
+                    <span class="tag tag-accent">Under Review</span>
+                  )}
+                </div>
+
+                <!-- Title -->
+                {pub.data.doi ? (
+                  <a
+                    href={`https://doi.org/${pub.data.doi}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="pub-title-link"
+                  >
+                    {pub.data.title}
+                  </a>
+                ) : (
+                  <p class="pub-title-link" style="cursor:default;">{pub.data.title}</p>
+                )}
+
+                <!-- Authors -->
+                <p class="meta" set:html={formatAuthors(pub.data.authors)} style="margin:0 0 0.2rem;"></p>
+                <!-- Journal + year -->
+                <p class="meta" style="margin:0;">{pub.data.journal}, {pub.data.year}</p>
+              </div>
+            ))}
+          </div>
+
+          {hasMore && (
+            <button
+              class="view-more-btn"
+              data-pub-target={group.key}
+              data-extra={pubs.length - DEFAULT_VISIBLE}
+              data-default={DEFAULT_VISIBLE}
+            >
+              <span class="pub-btn-label">Show {pubs.length - DEFAULT_VISIBLE} more</span>
+            </button>
+          )}
+        </div>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+  .pub-hidden {
+    display: none;
+  }
+
+  .scholar-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .scholar-link:hover {
+    transform: translateX(4px);
+  }
+
+  .scholar-icon {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s, transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    flex-shrink: 0;
+  }
+
+  .scholar-link:hover .scholar-icon {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.view-more-btn[data-pub-target]').forEach(btn => {
+    const target = btn.dataset.pubTarget!;
+    const label = btn.querySelector('.pub-btn-label') as HTMLElement;
+    let expanded = false;
+
+    btn.addEventListener('click', () => {
+      expanded = !expanded;
+      const defaultVisible = parseInt(btn.dataset.default ?? '2');
+      document.querySelectorAll<HTMLElement>(`.pub-entry[data-pub-group="${target}"]`).forEach(el => {
+        const idx = parseInt(el.dataset.pubIndex ?? '0');
+        if (idx < defaultVisible) return;
+        if (expanded) {
+          el.classList.remove('pub-hidden');
+        } else {
+          el.classList.add('pub-hidden');
+        }
+      });
+      label.textContent = expanded
+        ? 'Show less'
+        : `Show ${btn.dataset.extra} more`;
+    });
+  });
+</script>

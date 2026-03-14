@@ -1,0 +1,86 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+const skills = [
+  {
+    area: 'Programming',
+    items: ['Python', 'C/C++', 'Java', 'JavaScript'],
+  },
+  {
+    area: 'ML / Deep Learning',
+    items: ['PyTorch', 'scikit-learn', 'HuggingFace Transformers', 'NumPy', 'Pandas'],
+  },
+  {
+    area: 'Security',
+    items: ['Penetration testing', 'OWASP audits', 'Vulnerability analysis', 'Wireshark'],
+  },
+  {
+    area: 'Specialized',
+    items: ['CAN bus / IDS protocols', 'MQTT', 'Linux', 'Docker', 'Git', 'LaTeX'],
+  },
+];
+
+const peerReview = [
+  { journal: 'IEEE Transactions on Information Forensics and Security (TIFS)', count: 4 },
+  { journal: 'Scientific Reports', count: 2 },
+  { journal: 'Cluster Computing', count: 2 },
+  { journal: 'IEEE Network', count: 1 },
+  { journal: 'IEEE Transactions on Industrial Informatics', count: 1 },
+];
+---
+
+<section id="skills">
+  <div class="container">
+    <SectionHeading title="Skills & Service" />
+
+    <div class="two-col skills-grid">
+      <!-- Technical Skills -->
+      <div data-reveal>
+        <h3 style="font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.6;margin-bottom:1.25rem;">Technical Skills</h3>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          {skills.map(group => (
+            <div>
+              <div style="font-family:var(--font-mono);font-size:0.75rem;font-weight:500;color:var(--color-muted);margin-bottom:0.35rem;letter-spacing:0.05em;">{group.area}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
+                {group.items.map(item => (
+                  <span class="tag">{item}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Peer Review -->
+      <div data-reveal>
+        <h3 style="font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.6;margin-bottom:1.25rem;">Peer Review Service</h3>
+        <p class="meta" style="margin-bottom:1rem;">10 reviews · 5 journals</p>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;">
+          {peerReview.map(item => (
+            <div class="peer-row">
+              <span style="font-size:0.82rem;">{item.journal}</span>
+              <span class="meta" style="flex-shrink:0;margin-left:0.75rem;">{item.count}×</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.skills-grid {
+  grid-template-columns: 2fr 3fr;
+}
+.peer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.5rem 0 0.5rem 0.35rem;
+  transition: padding-left 0.15s;
+}
+.peer-row:hover {
+  padding-left: 0.65rem;
+}
+</style>

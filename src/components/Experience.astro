@@ -1,0 +1,281 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeading from './SectionHeading.astro';
+
+const allExp = await getCollection('experience');
+const sorted = allExp.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const flags: Record<string, string> = {
+  'innova':  '🇳🇱',
+  'digires': '🇳🇱',
+  'sch':     '🇰🇷',
+  'zalo':   '🇻🇳',
+};
+---
+
+<section id="experience">
+  <div class="container">
+    <SectionHeading title="Experience" />
+
+    <!-- Column labels -->
+    <div class="stl-labels">
+      <div class="stl-col-label stl-col-label-left">Academic</div>
+      <div></div>
+      <div class="stl-col-label">Industry</div>
+    </div>
+
+    <!-- Split timeline rows -->
+    {sorted.map((exp, i) => {
+      const isLeft = exp.data.type === 'research';
+      const isCurrent = exp.data.period.includes('Present');
+      const detailsId = `detail-${exp.id}`;
+      const isLast = i === sorted.length - 1;
+      const hasDetails = (exp.data.projects && exp.data.projects.length > 0) || (exp.data.description && exp.data.description.length > 0);
+      return (
+        <div class={`stl-row${isCurrent ? ' stl-row-current' : ''}`}>
+
+          {/* Left cell — Academic */}
+          <div class="stl-cell stl-cell-left">
+            {isLeft && (
+              <div data-reveal class="stl-card">
+                <div class="stl-card-header">
+                  <div class="meta" style="margin-bottom:0.15rem;">{exp.data.period}</div>
+                  <div class="stl-title">
+                    {flags[exp.id] ?? ''} {exp.data.title}
+                  </div>
+                  <div class="stl-org">{exp.data.organization}</div>
+                </div>
+                <ul
+                  class="exp-details"
+                  id={detailsId}
+                  style="display:none;text-align:left;margin:0.75rem 0 0.5rem;padding:0.65rem 0 0.5rem 1rem;border-top:1px solid var(--color-border);font-size:0.85rem;color:var(--color-muted);line-height:1.75;"
+                >
+                  {exp.data.projects
+                    ? exp.data.projects.map(proj => (
+                        <li style="list-style:none; margin-bottom:0.75rem; padding:0;">
+                          <div style="font-weight:600; font-size:0.83rem; color:var(--color-text); margin-bottom:0.25rem;">
+                            {proj.title}
+                            {proj.period && <span class="meta" style="font-weight:400; margin-left:0.4rem;">{proj.period}</span>}
+                          </div>
+                          <ul style="margin:0; padding-left:0; padding-right:1rem; list-style:disc; list-style-position:inside;">
+                            {proj.description.map(line => (
+                              <li style="margin-bottom:0.25rem;">{line}</li>
+                            ))}
+                            {proj.output && (
+                              <li style="color:var(--color-accent);list-style:none;margin-top:0.15rem;">
+                                → [{proj.output}]
+                              </li>
+                            )}
+                          </ul>
+                        </li>
+                      ))
+                    : exp.data.description.map(line => (
+                        <li style="margin-bottom:0.4rem; padding-right:1rem;">{line}</li>
+                      ))
+                  }
+                  {!exp.data.projects && exp.data.output && (
+                    <li style="color:var(--color-accent);list-style:none;margin-top:0.25rem;">
+                      → [{exp.data.output}]
+                    </li>
+                  )}
+                </ul>
+                {hasDetails && (
+                  <button class="collapse-btn stl-collapse-left" data-details={detailsId}>
+                    <span class="collapse-label">+ details</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Center — dot + connecting line */}
+          <div class="stl-center-col">
+            <div class={`stl-dot${isCurrent ? ' stl-dot-current' : ''}`}></div>
+            {!isLast && <div class="stl-vline"></div>}
+          </div>
+
+          {/* Right cell — Industry */}
+          <div class="stl-cell stl-cell-right">
+            {!isLeft && (
+              <div data-reveal class="stl-card">
+                <div class="meta" style="margin-bottom:0.15rem;">{exp.data.period}</div>
+                <div class="stl-title">
+                  {flags[exp.id] ?? ''} {exp.data.title}
+                </div>
+                <div class="stl-org">{exp.data.organization}</div>
+                <ul
+                  class="exp-details"
+                  id={detailsId}
+                  style="display:none;margin:0.75rem 0 0.5rem;padding:0.65rem 0 0.5rem 1rem;border-top:1px solid var(--color-border);font-size:0.85rem;color:var(--color-muted);line-height:1.75;"
+                >
+                  {exp.data.projects
+                    ? exp.data.projects.map(proj => (
+                        <li style="list-style:none; margin-bottom:0.75rem; padding:0;">
+                          <div style="font-weight:600; font-size:0.83rem; color:var(--color-text); margin-bottom:0.25rem;">
+                            {proj.title}
+                            {proj.period && <span class="meta" style="font-weight:400; margin-left:0.4rem;">{proj.period}</span>}
+                          </div>
+                          <ul style="margin:0; padding-left:1rem; list-style:disc;">
+                            {proj.description.map(line => (
+                              <li style="margin-bottom:0.25rem;">{line}</li>
+                            ))}
+                            {proj.output && (
+                              <li style="color:var(--color-accent);list-style:none;margin-top:0.15rem;">
+                                → [{proj.output}]
+                              </li>
+                            )}
+                          </ul>
+                        </li>
+                      ))
+                    : exp.data.description.map(line => (
+                        <li style="margin-bottom:0.4rem;">{line}</li>
+                      ))
+                  }
+                  {!exp.data.projects && exp.data.output && (
+                    <li style="color:var(--color-accent);list-style:none;margin-top:0.25rem;">
+                      → [{exp.data.output}]
+                    </li>
+                  )}
+                </ul>
+                {hasDetails && (
+                  <button class="collapse-btn stl-collapse-right" data-details={detailsId}>
+                    <span class="collapse-label">+ details</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+
+        </div>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+/* ── Labels row ── */
+.stl-labels {
+  display: grid;
+  grid-template-columns: 1fr 2.5rem 1fr;
+  margin-bottom: 0.5rem;
+}
+
+.stl-col-label {
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.stl-col-label-left {
+  text-align: right !important;
+}
+
+.stl-collapse-left {
+  display: block;
+  width: 100%;
+  text-align: right;
+}
+
+/* ── Each row ── */
+.stl-row {
+  display: grid;
+  grid-template-columns: 1fr 2.5rem 1fr;
+}
+
+/* ── Cell sides ── */
+.stl-cell {
+  padding-bottom: 2rem;
+}
+.stl-cell-left  { padding-right: 1.25rem; }
+.stl-cell-right { padding-left:  1.25rem; }
+
+.stl-cell-left .stl-card-header { text-align: right; }
+.stl-cell-left .exp-details,
+.stl-cell-left .exp-details * { text-align: left !important; }
+
+/* ── Center column ── */
+.stl-center-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.stl-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  background-color: var(--color-bg);
+  flex-shrink: 0;
+  margin-top: 0.35rem;
+  position: relative;
+  z-index: 1;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.stl-dot-current {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+}
+
+.stl-row:hover .stl-dot {
+  border-color: var(--color-accent);
+}
+
+.stl-vline {
+  flex: 1;
+  width: 1px;
+  background: var(--color-border);
+  margin-top: 3px;
+  min-height: 1rem;
+}
+
+/* ── Card content ── */
+.stl-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  margin-bottom: 0.1rem;
+}
+
+.stl-org {
+  font-size: 0.82rem;
+  color: var(--color-muted);
+  margin-bottom: 0.35rem;
+}
+
+/* ── Hover translate ── */
+.stl-card {
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.stl-cell-left:has(.stl-card):hover .stl-card  { transform: translateX(-5px); }
+.stl-cell-right:has(.stl-card):hover .stl-card { transform: translateX(5px); }
+
+/* ── Mobile: stack ── */
+@media (max-width: 600px) {
+  .stl-row, .stl-labels { grid-template-columns: 0 2rem 1fr; }
+  .stl-cell-left { display: none; }
+  .stl-cell-right { padding-left: 0.75rem; }
+}
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.collapse-btn').forEach(btn => {
+    const id = btn.dataset.details!;
+    const panel = document.getElementById(id) as HTMLElement | null;
+    const label = btn.querySelector('.collapse-label') as HTMLElement;
+    if (!panel || !label) return;
+
+    let open = false;
+    btn.addEventListener('click', () => {
+      open = !open;
+      panel.style.display = open ? 'block' : 'none';
+      label.textContent = open ? '− details' : '+ details';
+    });
+  });
+</script>

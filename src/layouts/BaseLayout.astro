@@ -1,0 +1,123 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL('/og-image.png', Astro.site)} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@d41sy___" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/og-image.png', Astro.site)} />
+
+    <!-- Computer Modern (LaTeX) web font -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/src/cmu-serif.css" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Title -->
+    <title>{title}</title>
+
+    <!-- JSON-LD Person schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Tien-Dat Le",
+        "alternateName": "Lê Tiến Đạt",
+        "jobTitle": "EngD Researcher",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Eindhoven University of Technology",
+          "url": "https://www.tue.nl"
+        },
+        "url": "https://d41sy.com",
+        "email": "tiendatt.716@gmail.com",
+        "sameAs": [
+          "https://github.com/d41sys",
+          "https://www.linkedin.com/in/tien-datle716",
+          "https://x.com/d41sy___",
+          "https://scholar.google.com/citations?user=JU4RyPQAAAAJ&hl=en"
+        ]
+      }
+    </script>
+
+    <!-- Theme init: inline script to prevent FOUC -->
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <!-- Custom cursor glow dot -->
+    <div id="cursor-dot" aria-hidden="true"></div>
+    <slot />
+
+    <script is:inline>
+      (function () {
+        const dot = document.getElementById('cursor-dot');
+        if (!dot || window.matchMedia('(pointer: coarse)').matches) return;
+
+        let rx = 0, ry = 0, tx = 0, ty = 0, raf;
+
+        document.addEventListener('mousemove', e => {
+          tx = e.clientX;
+          ty = e.clientY;
+          if (!dot.classList.contains('cd-visible')) dot.classList.add('cd-visible');
+        }, { passive: true });
+
+        document.addEventListener('mouseleave', () => dot.classList.remove('cd-visible'));
+
+        // Use event delegation for interactive hover state
+        document.addEventListener('mouseover', e => {
+          if (e.target.closest('a, button, .tag, .tl-row, .pub-entry, .flat-row, .peer-row, [role="button"]')) {
+            dot.classList.add('cd-hover');
+          }
+        });
+        document.addEventListener('mouseout', e => {
+          if (e.target.closest('a, button, .tag, .tl-row, .pub-entry, .flat-row, .peer-row, [role="button"]')) {
+            dot.classList.remove('cd-hover');
+          }
+        });
+
+        // Smooth lag follow
+        function loop() {
+          rx += (tx - rx) * 0.18;
+          ry += (ty - ry) * 0.18;
+          dot.style.transform = `translate(${rx}px, ${ry}px)`;
+          raf = requestAnimationFrame(loop);
+        }
+        loop();
+      })();
+    </script>
+  </body>
+</html>

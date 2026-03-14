@@ -1,0 +1,68 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { Icon } from 'astro-icon/components';
+
+const certificates = [
+  {
+    name: 'Machine Learning',
+    issuer: 'Coursera / DeepLearning.AI',
+    date: 'Jan 2023',
+    url: '#', // TODO: add certificate link
+  },
+  {
+    name: 'Machine Learning in Production',
+    issuer: 'Coursera / DeepLearning.AI',
+    date: 'Jan 2023',
+    url: '#',
+  },
+  {
+    name: 'Full Stack Application Development Capstone Project',
+    issuer: 'Coursera / IBM',
+    date: 'Jan 2023',
+    url: '#',
+  },
+  {
+    name: 'Developing Back-End Apps with Node.js and Express',
+    issuer: 'Coursera / IBM',
+    date: 'Dec 2022',
+    url: '#',
+  },
+];
+---
+
+<section id="certificates">
+  <div class="container">
+    <SectionHeading title="Certificates" />
+
+    <div>
+      {certificates.map(cert => (
+        <div data-reveal class="flat-row">
+          <div style="display:flex;align-items:baseline;gap:0.75rem;flex-wrap:wrap;">
+            <span style="font-size:0.88rem;font-weight:500;">{cert.name}</span>
+            <span class="meta">{cert.issuer}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0;">
+            <span class="meta">{cert.date}</span>
+            <a
+              href={cert.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`View ${cert.name} certificate`}
+              title="View certificate"
+              style="
+                display:flex;
+                align-items:center;
+                opacity:0.4;
+                transition:opacity 0.2s, color 0.2s;
+              "
+              onmouseover="this.style.opacity='1';this.style.color='var(--color-accent)';"
+              onmouseout="this.style.opacity='0.4';this.style.color='inherit';"
+            >
+              <Icon name="lucide:external-link" width={13} height={13} />
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

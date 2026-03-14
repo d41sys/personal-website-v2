@@ -1,0 +1,52 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<button
+  id="theme-toggle"
+  aria-label="Toggle dark/light theme"
+  title="Toggle theme"
+  style="
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    color: inherit;
+    opacity: 0.65;
+    transition: opacity 0.2s;
+  "
+  onmouseover="this.style.opacity='1'"
+  onmouseout="this.style.opacity='0.65'"
+>
+  <span id="theme-icon-sun" style="display:none;" aria-hidden="true">
+    <Icon name="lucide:sun" width={17} height={17} />
+  </span>
+  <span id="theme-icon-moon" aria-hidden="true">
+    <Icon name="lucide:moon" width={17} height={17} />
+  </span>
+</button>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  const sun = document.getElementById('theme-icon-sun');
+  const moon = document.getElementById('theme-icon-moon');
+  const html = document.documentElement;
+
+  function applyTheme(theme: string) {
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    if (sun && moon) {
+      sun.style.display = theme === 'dark' ? 'block' : 'none';
+      moon.style.display = theme === 'dark' ? 'none' : 'block';
+    }
+  }
+
+  applyTheme(html.getAttribute('data-theme') || 'light');
+
+  btn?.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+</script>

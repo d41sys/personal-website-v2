@@ -1,0 +1,48 @@
+---
+---
+<script>
+  function initScrollReveal() {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const allReveal = document.querySelectorAll('[data-reveal], [data-reveal-left], [data-reveal-scale]');
+
+    if (prefersReduced) {
+      allReveal.forEach(el => el.classList.add('revealed'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            const delay = parseFloat(el.dataset.revealDelay ?? '0');
+            setTimeout(() => el.classList.add('revealed'), delay * 1000);
+            observer.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.07 }
+    );
+
+    // Group siblings to stagger within their parent
+    const seen = new Set<Element>();
+    allReveal.forEach(el => {
+      const parent = el.parentElement;
+      if (!parent || seen.has(parent)) return;
+      seen.add(parent);
+      const siblings = Array.from(parent.querySelectorAll('[data-reveal],[data-reveal-left],[data-reveal-scale]'));
+      siblings.forEach((sib, i) => {
+        (sib as HTMLElement).dataset.revealDelay = String(i * 0.08);
+      });
+    });
+
+    allReveal.forEach(el => observer.observe(el));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollReveal);
+  } else {
+    initScrollReveal();
+  }
+</script>

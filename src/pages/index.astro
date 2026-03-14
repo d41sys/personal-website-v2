@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Research from '../components/Research.astro';
+import Publications from '../components/Publications.astro';
+import Experience from '../components/Experience.astro';
+import Education from '../components/Education.astro';
+import Skills from '../components/Skills.astro';
+import Honors from '../components/Honors.astro';
+import Certificates from '../components/Certificates.astro';
+import Footer from '../components/Footer.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+
+const description =
+  'Tien-Dat Le — EngD Researcher at TU/e. Adversarially robust ML for safety-critical systems. 7 Q1 publications on intrusion detection, smart grid security, and energy management.';
+---
+
+<BaseLayout title="Tien-Dat Le" description={description}>
+  <Nav />
+  <main>
+    <Hero />
+    <Research />
+    <Experience />
+    <Publications />
+    <Education />
+    <Skills />
+    <Honors />
+    <Certificates />
+  </main>
+  <Footer />
+  <ScrollReveal />
+</BaseLayout>

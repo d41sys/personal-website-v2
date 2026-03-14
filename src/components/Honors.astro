@@ -1,0 +1,44 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+const honors = [
+  {
+    award: '3rd Place — LISATHON (LISA Lab Hackathon)',
+    date: 'Dec 2024',
+    org: 'Soonchunhyang University',
+  },
+  {
+    award: 'Top Highest GPA — Computer Network Faculty',
+    date: 'Aug 2021',
+    org: 'HCMUS, Vietnam National University',
+  },
+  {
+    award: 'TOP 7 — HCMUS-CTF Final (Capture the Flag)',
+    date: 'May 2020',
+    org: 'HCMUS, Vietnam National University',
+  },
+  {
+    award: 'MCSA Certification Scholarship for Excellent Students',
+    date: 'Jan 2020',
+    org: 'SaigonCTT',
+  },
+];
+---
+
+<section id="honors">
+  <div class="container">
+    <SectionHeading title="Honors & Awards" />
+
+    <div>
+      {honors.map(h => (
+        <div data-reveal class="flat-row">
+          <div>
+            <span style="font-size:0.9rem;font-weight:500;">{h.award}</span>
+            <span class="meta" style="margin-left:0.5rem;">· {h.org}</span>
+          </div>
+          <span class="meta" style="flex-shrink:0;">{h.date}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

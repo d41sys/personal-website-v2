@@ -1,0 +1,98 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+const education = [
+  {
+    flag: '🇳🇱',
+    degree: 'Engineering Doctorate (EngD), Electrical Engineering',
+    institution: 'Eindhoven University of Technology (TU/e)',
+    abbrev: 'TU/e',
+    location: 'Eindhoven, Netherlands',
+    period: 'May 2025 – Present',
+    gpa: null,
+    thesis: null,
+    note: 'Funded industry-linked research programme. Project: DigiRES',
+    award: null,
+    current: true,
+  },
+  {
+    flag: '🇰🇷',
+    degree: 'Master of Research, Mobility Security Convergence',
+    institution: 'Soonchunhyang University',
+    abbrev: 'SCH',
+    location: 'Asan-si, South Korea',
+    period: 'Feb 2023 – Feb 2025',
+    gpa: '4.2 / 4.5 (≈ 3.73 / 4.0 US)',
+    thesis: 'Deep Learning-based Approaches for Intrusion Detection in the In-vehicle Network and Smart Grids',
+    note: null,
+    award: '3rd place LISATHON, Dec 2024',
+    current: false,
+  },
+  {
+    flag: '🇻🇳',
+    degree: 'Bachelor of Information Technology (Computer Network & Telecommunication)',
+    institution: 'Ho Chi Minh City University of Science (HCMUS) — VNU',
+    abbrev: 'HCMUS',
+    location: 'Ho Chi Minh City, Vietnam',
+    period: 'Aug 2017 – Aug 2021',
+    gpa: '3.5 / 4.0 — Top GPA, Computer Network faculty',
+    thesis: '"Audio injection on controllable systems" — 10/10 (A+)',
+    note: 'Adversarial manipulation of embedded systems predates ML research by 4 years.',
+    award: 'Top GPA, Computer Network faculty (Aug 2021)',
+    current: false,
+  },
+];
+---
+
+<section id="education">
+  <div class="container">
+    <SectionHeading title="Education" />
+
+    <div class="tl-wrap">
+      {education.map((edu, i) => (
+        <div data-reveal class={`tl-row${edu.current ? ' tl-current' : ''}`}>
+          <div class="tl-gutter">
+            <div class="tl-dot"></div>
+            {i < education.length - 1 && <div class="tl-line"></div>}
+          </div>
+          <div class="tl-body">
+            <!-- Period + location -->
+            <div class="meta" style="margin-bottom: 0.2rem;">
+              {edu.period} · {edu.flag} {edu.location}
+            </div>
+
+            <!-- Degree + abbrev badge -->
+            <div style="display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.15rem;">
+              <span style="font-weight: 600; font-size: 0.92rem; line-height: 1.35;">{edu.degree}</span>
+              <span class="tag" style="font-size: 0.6rem;">{edu.abbrev}</span>
+            </div>
+
+            <!-- Institution -->
+            <div style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 0.4rem;">
+              {edu.institution}
+            </div>
+
+            {edu.gpa && (
+              <div class="meta" style="margin-bottom: 0.15rem;">GPA: {edu.gpa}</div>
+            )}
+            {edu.thesis && (
+              <div class="meta" style="margin-bottom: 0.15rem; font-style: italic;">
+                Thesis: "{edu.thesis}"
+              </div>
+            )}
+            {edu.note && (
+              <div style="font-size: 0.82rem; color: var(--color-muted); margin-bottom: 0.15rem;">
+                {edu.note}
+              </div>
+            )}
+            {edu.award && (
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-accent); margin-top: 0.25rem;">
+                ★ {edu.award}
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,432 @@
+@import "tailwindcss";
+
+/* Fonts */
+@import "@fontsource/atkinson-hyperlegible-mono/400.css";
+@import "@fontsource/atkinson-hyperlegible-mono/600.css";
+@import "@fontsource/atkinson-hyperlegible-mono/700.css";
+@import "@fontsource/ibm-plex-mono/300.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+/* Design tokens */
+@theme {
+  --color-bg: #FAFAFA;
+  --color-text: #1A1A1A;
+  --color-accent: #2563EB;
+  --color-muted: #6B7280;
+  --color-border: #E5E7EB;
+  --color-surface: #F3F4F6;
+
+  /* CMU Serif (Computer Modern) everywhere; mono only for labels/code */
+  --font-body: "CMU Serif", "Computer Modern", Georgia, serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+/* ─── Base ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  background-image: radial-gradient(circle at 1px 1px, #e3e3e3 1.5px, transparent 0);
+  background-size: 28px 28px;
+  color: var(--color-text);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.25s, color 0.25s;
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-theme="dark"] body {
+  background-image: radial-gradient(circle at 1px 1px, var(--color-surface) 1.5px, transparent 0);
+}
+
+/* Text selection */
+::selection { background-color: var(--color-accent); color: #fff; }
+
+/* ─── Dark mode — not pure black ────────────────────────── */
+[data-theme="dark"] {
+  --color-bg: #161618;
+  --color-text: #E8E8E8;
+  --color-accent: #60A5FA;
+  --color-muted: #9CA3AF;
+  --color-border: #2E2E32;
+  --color-surface: #212124;
+}
+
+[data-theme="dark"] body {
+  background-color: #161618;
+  color: #E8E8E8;
+}
+
+[data-theme="dark"] ::selection {
+  background-color: var(--color-accent);
+  color: #161618;
+}
+
+/* ─── Typography — all Inter, no mono headings ──────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-body);
+  line-height: 1.2;
+  margin: 0;
+  color: var(--color-text);
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+p { margin: 0; }
+
+/* ─── Section layout ────────────────────────────────────── */
+section {
+  padding: 4.5rem 0;
+}
+
+.container {
+  max-width: 54rem;
+  margin: 0 auto;
+  padding: 0 1.75rem;
+}
+
+/* ─── Links ─────────────────────────────────────────────── */
+a {
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+}
+
+.text-link { color: var(--color-accent); position: relative; }
+
+.text-link::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.25s ease;
+}
+
+.text-link:hover::after { width: 100%; }
+
+/* ─── Mono label / meta text ────────────────────────────── */
+.meta {
+  font-family: var(--font-mono);
+  font-weight: 300;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+/* ─── Scroll reveal ─────────────────────────────────────── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+}
+[data-reveal].revealed { opacity: 1; transform: translateY(0); }
+
+[data-reveal-left] {
+  opacity: 0;
+  transform: translateX(-16px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+[data-reveal-left].revealed { opacity: 1; transform: translateX(0); }
+
+[data-reveal-scale] {
+  opacity: 0;
+  transform: scale(0.97);
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+}
+[data-reveal-scale].revealed { opacity: 1; transform: scale(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal], [data-reveal-left], [data-reveal-scale] {
+    opacity: 1; transform: none; transition: none;
+  }
+}
+
+/* ─── Section heading ───────────────────────────────────── */
+.section-heading {
+  display: inline-block;
+  margin-bottom: 2.25rem;
+  cursor: default;
+}
+
+.section-heading-rule {
+  width: 2rem;
+  height: 2px;
+  background-color: var(--color-accent);
+  margin-top: 0.4rem;
+  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.section-heading:hover .section-heading-rule {
+  width: 5.5rem;
+}
+
+/* ─── Tags / badges ─────────────────────────────────────── */
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  display: inline-block;
+  transition: border-color 0.15s, color 0.15s;
+}
+.tag-accent { border-color: var(--color-accent); color: var(--color-accent); }
+.tag:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background-color: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+/* ─── Timeline (explicit structure, no pseudo magic) ────── */
+.tl-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.tl-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.tl-gutter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 0.75rem;
+  padding-top: 0.3rem;
+}
+
+.tl-dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  background-color: var(--color-bg);
+  flex-shrink: 0;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.tl-row.tl-current .tl-dot {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+}
+
+.tl-row:hover .tl-dot {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+}
+
+.tl-row {
+  transition: none;
+}
+
+.tl-body {
+  flex: 1;
+  padding-bottom: 2rem;
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.tl-row:hover .tl-body {
+  transform: translateX(5px);
+}
+
+.tl-line {
+  width: 1px;
+  flex: 1;
+  background-color: var(--color-border);
+  margin-top: 3px;
+  min-height: 1.5rem;
+}
+
+.tl-row:last-child .tl-body {
+  padding-bottom: 0;
+}
+
+/* ─── Publications ──────────────────────────────────────── */
+.pub-entry {
+  padding: 1.1rem 0 1.1rem 0.35rem;
+  border-bottom: 1px solid var(--color-border);
+  border-left: 2px solid transparent;
+  transition: padding-left 0.2s, border-left-color 0.2s;
+}
+
+.pub-entry:hover {
+  padding-left: 0.65rem;
+  border-left-color: var(--color-accent);
+}
+
+/* Title link: underline grows on hover via text-decoration (works multi-line) */
+.pub-title-link {
+  color: var(--color-text);
+  font-weight: 500;
+  line-height: 1.45;
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.92rem;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s, color 0.2s;
+}
+
+.pub-entry:hover .pub-title-link {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
+}
+
+/* Highlighted author name — bold + accent color */
+.pub-entry .meta strong {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+/* ─── Flat rows (honors, certs) ─────────────────────────── */
+.flat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.5rem 0 0.5rem 0.35rem;
+  border-bottom: 1px solid var(--color-border);
+  border-left: 2px solid transparent;
+  gap: 1rem;
+  flex-wrap: wrap;
+  transition: padding-left 0.15s, border-left-color 0.15s;
+}
+.flat-row:hover { padding-left: 0.65rem; border-left-color: var(--color-accent); }
+
+/* ─── View More button ──────────────────────────────────── */
+.view-more-btn {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  background: none;
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+.view-more-btn:hover {
+  background-color: var(--color-accent);
+  color: #fff;
+}
+[data-theme="dark"] .view-more-btn:hover { color: #161618; }
+
+/* ─── Two column ────────────────────────────────────────── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem;
+}
+@media (max-width: 640px) {
+  .two-col { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+/* ─── Nav links ─────────────────────────────────────────── */
+.nav-link {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-accent);
+  transition: width 0.2s ease;
+}
+.nav-link:hover { opacity: 1; }
+.nav-link:hover::after { width: 100%; }
+.nav-link.active { opacity: 1; color: var(--color-accent); }
+.nav-link.active::after { width: 100%; }
+
+/* ─── Collapse toggle ───────────────────────────────────── */
+.collapse-btn {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  transition: color 0.15s;
+}
+.collapse-btn:hover { color: var(--color-accent); }
+
+/* ─── Focus ─────────────────────────────────────────────── */
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+/* ─── Custom cursor dot ─────────────────────────────────── */
+#cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  will-change: transform;
+  transition: width 0.2s, height 0.2s, opacity 0.3s, background-color 0.2s;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: multiply;
+}
+[data-theme="dark"] #cursor-dot { mix-blend-mode: screen; }
+#cursor-dot.cd-visible { opacity: 0.55; }
+#cursor-dot.cd-hover { width: 22px; height: 22px; opacity: 0.18; }

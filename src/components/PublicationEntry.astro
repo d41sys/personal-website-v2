@@ -1,0 +1,55 @@
+---
+interface Props {
+  id: string;
+  category: string;
+  title: string;
+  authors: string;
+  journal: string;
+  year: number;
+  doi?: string;
+  citations?: number;
+}
+
+const { id, category, title, authors, journal, year, doi, citations } = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  'under-review': 'Under Review',
+  'first-author': 'First Author',
+  'contributing': 'Contributing',
+  'corrigendum': 'Corrigendum',
+  'workshop': 'Workshop',
+};
+
+// Bold **name** markers → <strong>name</strong>
+function formatAuthors(str: string): string {
+  return str.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+}
+
+const formattedAuthors = formatAuthors(authors);
+---
+
+<div data-reveal style="padding: 1.25rem 0; border-bottom: 1px solid var(--color-border);">
+  <div style="display:flex;align-items:flex-start;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+    <span class="tag {category === 'under-review' ? 'tag-accent' : ''}">[{id}]</span>
+    {citations !== undefined && citations > 0 && (
+      <span class="meta" style="margin-left:auto;">{citations} citations</span>
+    )}
+  </div>
+
+  {doi ? (
+    <a
+      href={`https://doi.org/${doi}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-link"
+      style="font-weight:500;line-height:1.4;display:block;margin-bottom:0.4rem;"
+    >
+      {title}
+    </a>
+  ) : (
+    <p style="font-weight:500;line-height:1.4;margin:0 0 0.4rem;">{title}</p>
+  )}
+
+  <p class="meta" set:html={formattedAuthors} style="margin:0 0 0.25rem;"></p>
+  <p class="meta" style="margin:0;">{journal}, {year}</p>
+</div>

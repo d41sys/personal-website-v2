@@ -1,0 +1,75 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const year = new Date().getFullYear();
+
+const socialLinks = [
+  { label: 'Email',    href: 'mailto:tiendatt.716@gmail.com',                                icon: 'lucide:mail' },
+  { label: 'GitHub',   href: 'https://github.com/d41sys',                                    icon: 'simple-icons:github' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tien-datle716',                    icon: 'simple-icons:linkedin' },
+  { label: 'X',        href: 'https://x.com/d41sy___',                                       icon: 'simple-icons:x' },
+  { label: 'Scholar',  href: 'https://scholar.google.com/citations?user=JU4RyPQAAAAJ&hl=en', icon: 'simple-icons:googlescholar' },
+  { label: 'ORCID',   href: 'https://orcid.org/0009-0005-4877-3200',                       icon: 'simple-icons:orcid' },
+];
+---
+
+<footer style="padding: 3rem 0 2rem;">
+  <div class="container">
+    <!-- Top row: name + tagline -->
+    <div style="
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.75rem;
+      border-bottom: 0.5px solid var(--color-border);
+      text-align: center;
+    ">
+      <div>
+        <div style="
+          font-family: var(--font-heading);
+          font-size: 1rem;
+          font-weight: 700;
+          font-variant: small-caps;
+          letter-spacing: 0.05em;
+          text-shadow: 0 0 0.2px currentColor;
+          margin-bottom: 0.3rem;
+        ">
+          Tien-Dat Le
+        </div>
+        <div class="meta">EngD Researcher · Eindhoven University of Technology</div>
+      </div>
+      <div class="meta" style="align-self:flex-end;">© {year}</div>
+    </div>
+
+    <!-- Social icons + links -->
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; justify-content: center;">
+      {socialLinks.map(link => (
+        <a
+          href={link.href}
+          target={link.href.startsWith('mailto') ? '_self' : '_blank'}
+          rel="noopener noreferrer"
+          aria-label={link.label}
+          title={link.label}
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 300;
+            opacity: 0.55;
+            transition: opacity 0.2s, color 0.2s;
+          "
+          onmouseover="this.style.opacity='1';this.style.color='var(--color-accent)';"
+          onmouseout="this.style.opacity='0.55';this.style.color='inherit';"
+        >
+          <Icon name={link.icon} width={14} height={14} />
+          <span>{link.label}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</footer>

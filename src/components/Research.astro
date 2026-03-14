@@ -1,0 +1,36 @@
+---
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section id="research">
+  <div class="container">
+    <SectionHeading title="Research" />
+
+    <div data-reveal>
+      <p style="line-height: 1.8; margin-bottom: 1.25rem;">
+        My research sits at the intersection of <strong>time series anomaly detection</strong>,
+        <strong>AI security / adversarial ML</strong>, and
+        <strong>critical infrastructure security</strong> — specifically in-vehicle networks,
+        power grids, and IoT systems.
+      </p>
+      <p style="line-height: 1.8; color: var(--color-muted); font-size: 0.95rem;">
+        I build models that are not just accurate, but certifiably robust when deployed under
+        adversarial conditions. The through-line: offensive security intuitions applied to
+        ML threat modeling, from a background of finding real vulnerabilities at scale.
+      </p>
+    </div>
+
+    <!-- Research interests tags -->
+    <div data-reveal style="margin-top: 1.75rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      {[
+        'Adversarial ML',
+        'Anomaly Detection',
+        'Intrusion Detection',
+        'Critical Infrastructure',
+        'Federated Learning',
+      ].map(tag => (
+        <span class="tag">{tag}</span>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,114 @@
+# Publications — Tien-Dat Le
+# Last updated: Mar 2026
+# Note: Bold markers (**name**) are parsed in PublicationEntry.astro
+
+- id: "S.1"
+  category: "under-review"
+  title: "Federated Learning with Auxiliary Classifier GAN for In-Vehicle Intrusion Detection"
+  authors: "**T.D.Le** et al."
+  journal: "IEEE Transactions on Information Forensics and Security (TIFS) — Q1, IF ~7.2"
+  year: 2026
+  doi: ""
+  citations: 0
+  topic: "Federated learning, ACGAN, IDS, adversarial/generative modeling"
+  sortOrder: 1
+
+- id: "J.1"
+  category: "first-author"
+  title: "Multi-classification in-vehicle intrusion detection system using packet- and sequence-level characteristics from time-embedded transformer with autoencoder"
+  authors: "**T.D.Le**, T.H.B.Huy, P.V.Phu, D.Kim"
+  journal: "Knowledge-Based Systems, Volume 299, 2024, 112091 — Q1"
+  year: 2024
+  doi: "10.1016/j.knosys.2024.112091"
+  citations: 20
+  topic: "In-vehicle IDS, CAN bus, transformer + autoencoder"
+  sortOrder: 2
+
+- id: "J.2"
+  category: "first-author"
+  title: "Advanced deep learning-based electricity theft detection in smart grids using multi-dimensional analysis with Convolutional Autoencoder and Transformer"
+  authors: "**T.D.Le**, N.T.M.Duy, T.H.B.Huy, P.V.Phu, H.T.Doan, D.Kim"
+  journal: "Engineering Applications of Artificial Intelligence, Volume 157, 2025, 111333 — Q1"
+  year: 2025
+  doi: "10.1016/j.engappai.2025.111333"
+  citations: 3
+  topic: "Smart grid security, electricity theft detection, time series anomaly detection"
+  sortOrder: 3
+
+- id: "J.3"
+  category: "contributing"
+  title: "Real-time power scheduling for an isolated microgrid with renewable energy and energy storage system via a supervised-learning-based strategy"
+  authors: "T.H.B.Huy, **T.D.Le**, P.Van Phu, S.Park, D.Kim"
+  journal: "Journal of Energy Storage 88, 111506 — Q1"
+  year: 2024
+  doi: ""
+  citations: 30
+  topic: "Microgrid energy management, supervised learning, real-time optimization"
+  sortOrder: 4
+
+- id: "J.4"
+  category: "contributing"
+  title: "Robust real-time energy management for a hydrogen refueling station using generative adversarial imitation learning"
+  authors: "T.H.B.Huy, N.T.M.Duy, P.Van Phu, **T.D.Le**, S.Park, D.Kim"
+  journal: "Applied Energy 373, 123847 — Q1"
+  year: 2024
+  doi: ""
+  citations: 26
+  topic: "Hydrogen energy systems, GAN-based imitation learning, robust energy management"
+  sortOrder: 5
+
+- id: "J.5"
+  category: "contributing"
+  title: "EfficientNet-based universum-inspired supervised contrastive learning and transfer learning for in-vehicle intrusion detection systems"
+  authors: "T.H.Tran, **T.D.Le**, T.H.B.Huy, D.Kim"
+  journal: "Knowledge-Based Systems, 114716 — Q1"
+  year: 2025
+  doi: ""
+  citations: 0
+  topic: "In-vehicle IDS, EfficientNet, contrastive learning, transfer learning"
+  sortOrder: 6
+
+- id: "J.6"
+  category: "contributing"
+  title: "Multi-class intrusion detection system for in-vehicle networks using few-shot learning and convolutional anomaly transformer network"
+  authors: "N.T.M.Duy, T.H.B.Huy, P.Van Phu, **T.D.Le**, D.Kim"
+  journal: "Knowledge-Based Systems, 114436 — Q1"
+  year: 2025
+  doi: ""
+  citations: 0
+  topic: "In-vehicle IDS, few-shot learning, convolutional anomaly transformer"
+  sortOrder: 7
+
+- id: "J.7"
+  category: "contributing"
+  # TODO: verify 4th author before publishing
+  title: "Multi-Objective Energy Management for an Integrated Energy System With Small Modular Reactors Considering Uncertainty"
+  authors: "P.V.Phu, T.H.B.Huy, **T.D.Le**, T.D.Le, S.Park, D.Kim"
+  journal: "International Journal of Energy Research 2026 (1), 1046502 — Q1"
+  year: 2026
+  doi: ""
+  citations: 0
+  topic: "Multi-objective energy management, small modular reactors, uncertainty handling"
+  sortOrder: 8
+
+- id: "J.3c"
+  category: "corrigendum"
+  title: "Corrigendum to \"Real-time power scheduling for an isolated microgrid with renewable energy and energy storage system via a supervised-learning-based strategy\""
+  authors: "T.H.B.Huy, **T.D.Le**, P.Van Phu, D.Kim"
+  journal: "Journal of Energy Storage 95, 112584 — Q1"
+  year: 2024
+  doi: ""
+  citations: 0
+  topic: "Corrigendum to J.3"
+  sortOrder: 9
+
+- id: "W.1"
+  category: "workshop"
+  title: "Vietnamese User Awareness Against Scams in Cyberspace: An Empirical Survey"
+  authors: "K.L.Pham, **T.D.Le**, A.D.Tran, M.T.Tran, D.T.Dang-Nguyen"
+  journal: "Proceedings of the 1st Workshop on Security-Centric Strategies for Combating Scams"
+  year: 2024
+  doi: ""
+  citations: 0
+  topic: "Cybersecurity awareness, social engineering, Vietnamese internet users"
+  sortOrder: 10
