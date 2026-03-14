@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
-import { Analytics } from '@vercel/analytics/astro';
-import { SpeedInsights } from '@vercel/speed-insights/astro';
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 
 interface Props {
   title: string;
@@ -81,12 +81,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <script is:inline>
       (function () {
         const stored = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = stored || (prefersDark ? 'dark' : 'light');
+        const theme = stored || 'light';
         document.documentElement.setAttribute('data-theme', theme);
       })();
     </script>
 
+    <Analytics />
   </head>
   <body>
     <!-- Custom cursor glow dot -->
@@ -130,7 +130,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         loop();
       })();
     </script>
-    <Analytics />
     <SpeedInsights />
   </body>
 </html>
