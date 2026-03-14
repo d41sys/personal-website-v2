@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import { Analytics } from '@vercel/analytics/astro';
+import { SpeedInsights } from '@vercel/speed-insights/astro';
 
 interface Props {
   title: string;
@@ -66,6 +68,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
     </script>
 
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LPGDL3V5YP"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LPGDL3V5YP');
+    </script>
+
     <!-- Theme init: inline script to prevent FOUC -->
     <script is:inline>
       (function () {
@@ -119,5 +130,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         loop();
       })();
     </script>
+    <Analytics />
+    <SpeedInsights />
   </body>
 </html>

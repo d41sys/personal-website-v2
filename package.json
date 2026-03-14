@@ -20,6 +20,8 @@
     "@iconify-json/simple-icons": "^1.2.73",
     "@phosphor-icons/web": "^2.1.2",
     "@tailwindcss/vite": "^4.2.1",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "astro": "^6.0.4",
     "astro-icon": "^1.1.5",
     "tailwindcss": "^4.2.1"
