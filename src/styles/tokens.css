@@ -6,6 +6,7 @@
   --color-muted:   #6B7280;
   --color-border:  #E5E7EB;
   --color-surface: #F3F4F6;
+  --color-margin:  #C8C8CC;
 
   /* CMU Serif body; IBM Plex Mono for labels/code */
   --font-body: "CMU Serif", "Computer Modern", Georgia, serif;
@@ -20,4 +21,5 @@
   --color-muted:   #9CA3AF;
   --color-border:  #2E2E32;
   --color-surface: #212124;
+  --color-margin:  #0C0C10;
 }

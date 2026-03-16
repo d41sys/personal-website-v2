@@ -42,57 +42,59 @@ const DEFAULT_VISIBLE = 2;
       if (pubs.length === 0) return null;
       const hasMore = pubs.length > DEFAULT_VISIBLE;
       return (
-        <div data-reveal style="margin-bottom: 2.75rem;">
-          <h3 style="
-            font-size: 0.7rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            opacity: 0.5;
-            margin-bottom: 0;
-          ">
-            {group.label}
-          </h3>
+        <div style="margin-bottom: 2.75rem;">
+          <div data-reveal>
+            <h3 style="
+              font-size: 0.7rem;
+              letter-spacing: 0.12em;
+              text-transform: uppercase;
+              opacity: 0.5;
+              margin-bottom: 0;
+            ">
+              {group.label}
+            </h3>
 
-          <div id={`pub-group-${group.key}`}>
-            {pubs.map((pub, i) => (
-              <div
-                class={`pub-entry${i >= DEFAULT_VISIBLE ? ' pub-hidden' : ''}`}
-                data-pub-group={group.key}
-                data-pub-index={i}
-              >
-                <!-- ID tag + citations -->
-                <div style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.45rem;">
-                  <span class={`tag${group.key === 'under-review' ? ' tag-accent' : ''}`}>
-                    [{pub.data.id}]
-                  </span>
-                  {pub.data.citations !== undefined && pub.data.citations > 0 && (
-                    <span class="meta">{pub.data.citations} citations</span>
+            <div id={`pub-group-${group.key}`}>
+              {pubs.map((pub, i) => (
+                <div
+                  class={`pub-entry${i >= DEFAULT_VISIBLE ? ' pub-hidden' : ''}`}
+                  data-pub-group={group.key}
+                  data-pub-index={i}
+                >
+                  <!-- ID tag + citations -->
+                  <div style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.45rem;">
+                    <span class={`tag${group.key === 'under-review' ? ' tag-accent' : ''}`}>
+                      [{pub.data.id}]
+                    </span>
+                    {pub.data.citations !== undefined && pub.data.citations > 0 && (
+                      <span class="meta">{pub.data.citations} citations</span>
+                    )}
+                    {group.key === 'under-review' && (
+                      <span class="tag tag-accent">Under Review</span>
+                    )}
+                  </div>
+
+                  <!-- Title -->
+                  {pub.data.doi ? (
+                    <a
+                      href={`https://doi.org/${pub.data.doi}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="pub-title-link"
+                    >
+                      {pub.data.title}
+                    </a>
+                  ) : (
+                    <p class="pub-title-link" style="cursor:default;">{pub.data.title}</p>
                   )}
-                  {group.key === 'under-review' && (
-                    <span class="tag tag-accent">Under Review</span>
-                  )}
+
+                  <!-- Authors -->
+                  <p class="meta" set:html={formatText(pub.data.authors)} style="margin:0 0 0.2rem;"></p>
+                  <!-- Journal + year -->
+                  <p class="meta" style="margin:0;">{pub.data.journal}, {pub.data.year}</p>
                 </div>
-
-                <!-- Title -->
-                {pub.data.doi ? (
-                  <a
-                    href={`https://doi.org/${pub.data.doi}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="pub-title-link"
-                  >
-                    {pub.data.title}
-                  </a>
-                ) : (
-                  <p class="pub-title-link" style="cursor:default;">{pub.data.title}</p>
-                )}
-
-                <!-- Authors -->
-                <p class="meta" set:html={formatText(pub.data.authors)} style="margin:0 0 0.2rem;"></p>
-                <!-- Journal + year -->
-                <p class="meta" style="margin:0;">{pub.data.journal}, {pub.data.year}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           {hasMore && (

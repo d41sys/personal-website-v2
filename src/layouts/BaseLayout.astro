@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
+import { getCollection } from 'astro:content';
 
 interface Props {
   title: string;
@@ -10,6 +11,8 @@ interface Props {
 
 const { title, description } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const quotesRaw = await getCollection('quotes');
+const quotesJson = JSON.stringify(quotesRaw.map(q => q.data));
 ---
 
 <!doctype html>
@@ -89,11 +92,105 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <Analytics />
   </head>
   <body>
+    <!-- Full-screen loading overlay -->
+    <div id="page-loader" aria-hidden="true">
+      <div class="loader-center">
+        <span class="loader-monogram">TDL</span>
+        <div class="loader-bar"><div class="loader-fill"></div></div>
+        <div class="loader-quote">
+          <p class="loader-quote-text"></p>
+          <p class="loader-quote-attr"></p>
+        </div>
+      </div>
+    </div>
+
     <!-- Custom cursor glow dot -->
     <div id="cursor-dot" aria-hidden="true"></div>
     <slot />
 
+    <script is:inline set:html={`window.__QUOTES__=${quotesJson};`}></script>
     <script src="../scripts/cursor.ts"></script>
+    <script is:inline>
+      (function () {
+        var QUOTES = window.__QUOTES__ || [];
+
+        var monogram  = document.querySelector('.loader-monogram');
+        var bar       = document.querySelector('.loader-bar');
+        var quoteWrap = document.querySelector('.loader-quote');
+        var quoteText = document.querySelector('.loader-quote-text');
+        var quoteAttr = document.querySelector('.loader-quote-attr');
+        if (!monogram) return;
+
+        // Pre-populate so layout is stable before animations begin
+        var q = QUOTES[Math.floor(Math.random() * QUOTES.length)] || {};
+        if (quoteText) quoteText.textContent = '\u201c' + (q.text || '') + '\u201d';
+        if (quoteAttr) quoteAttr.textContent = q.attr || '';
+
+        var POOL = 'abcdeghjkmnpqrstuvwxyz23456789';
+
+        function scramble(el, target, duration, cb) {
+          var tick    = 40;
+          var start   = Date.now();
+          var fromLen = el.textContent.length;
+          var toLen   = target.length;
+          var chars   = target.split('');
+          var timer   = setInterval(function () {
+            var p          = Math.min((Date.now() - start) / duration, 1);
+            var visibleLen = Math.round(fromLen + (toLen - fromLen) * p);
+            var out        = '';
+            for (var i = 0; i < visibleLen; i++) {
+              var ch = chars[i];
+              if (!/[A-Za-z]/.test(ch)) { out += ch; continue; }
+              out += p >= (i + 1) / toLen
+                ? ch
+                : POOL[Math.floor(Math.random() * POOL.length)];
+            }
+            el.textContent = out;
+            if (p >= 1) { el.textContent = target; clearInterval(timer); if (cb) cb(); }
+          }, tick);
+        }
+
+        var seqDone = false, pageLoaded = false;
+        function tryExit() {
+          if (!seqDone || !pageLoaded) return;
+          var el = document.getElementById('page-loader');
+          if (!el) return;
+          var center = el.querySelector('.loader-center');
+          if (center) center.classList.add('exit');
+          setTimeout(function () {
+            el.classList.add('loader-open');
+            setTimeout(function () { el.remove(); }, 620);
+          }, 300);
+        }
+
+        window.addEventListener('load', function () { pageLoaded = true; tryExit(); });
+
+        // Noise phase: random chars cycle before resolving to 'd41sy'
+        var noiseLen = 5;
+        function randomNoise() {
+          var s = '';
+          for (var n = 0; n < noiseLen; n++) s += POOL[Math.floor(Math.random() * POOL.length)];
+          return s;
+        }
+        monogram.textContent = randomNoise();
+        var noiseEnd   = Date.now() + 500;
+        var noiseTimer = setInterval(function () {
+          monogram.textContent = randomNoise();
+          if (Date.now() >= noiseEnd) {
+            clearInterval(noiseTimer);
+            scramble(monogram, 'd41sy', 600, function () {
+              setTimeout(function () {
+                scramble(monogram, 'hello world!', 600, function () {
+                  if (bar) { bar.style.opacity = '0'; bar.style.transform = 'translateY(-4px)'; }
+                  if (quoteWrap) quoteWrap.classList.add('visible');
+                  setTimeout(function () { seqDone = true; tryExit(); }, 2000);
+                });
+              }, 200);
+            });
+          }
+        }, 40);
+      })();
+    </script>
     <SpeedInsights />
   </body>
 </html>

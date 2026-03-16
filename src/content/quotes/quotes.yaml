@@ -1,0 +1,99 @@
+- id: jobs-1
+  text: "The people who are crazy enough to think they can change the world are the ones who do."
+  attr: "— Steve Jobs"
+
+- id: jobs-2
+  text: "The only way to do great work is to love what you do."
+  attr: "— Steve Jobs"
+
+- id: jobs-3
+  text: "Innovation distinguishes between a leader and a follower."
+  attr: "— Steve Jobs"
+
+- id: einstein-1
+  text: "Imagination is more important than knowledge."
+  attr: "— Albert Einstein"
+
+- id: einstein-2
+  text: "A person who never made a mistake never tried anything new."
+  attr: "— Albert Einstein"
+
+- id: einstein-3
+  text: "The measure of intelligence is the ability to change."
+  attr: "— Albert Einstein"
+
+- id: einstein-4
+  text: "The important thing is not to stop questioning. Curiosity has its own reason for existing."
+  attr: "— Albert Einstein"
+
+- id: feynman-1
+  text: "The first principle is that you must not fool yourself—and you are the easiest person to fool."
+  attr: "— Richard Feynman"
+
+- id: feynman-2
+  text: "Study hard what interests you the most in the most undisciplined, irreverent and original manner possible."
+  attr: "— Richard Feynman"
+
+- id: turing-1
+  text: "We can only see a short distance ahead, but we can see plenty there that needs to be done."
+  attr: "— Alan Turing"
+
+- id: abelson-1
+  text: "Programs must be written for people to read, and only incidentally for machines to execute."
+  attr: "— Harold Abelson"
+
+- id: davinci-1
+  text: "Simplicity is the ultimate sophistication."
+  attr: "— Leonardo da Vinci"
+
+- id: hopper-1
+  text: "The most dangerous phrase in the language is 'we've always done it this way.'"
+  attr: "— Grace Hopper"
+
+- id: asimov-1
+  text: "The most exciting phrase to hear in science is not 'Eureka' but 'That's funny…'"
+  attr: "— Isaac Asimov"
+
+- id: sagan-1
+  text: "Somewhere, something incredible is waiting to be known."
+  attr: "— Carl Sagan"
+
+- id: sagan-2
+  text: "Science is a way of thinking much more than it is a body of knowledge."
+  attr: "— Carl Sagan"
+
+- id: hamming-1
+  text: "The purpose of computing is insight, not numbers."
+  attr: "— Richard Hamming"
+
+- id: knuth-1
+  text: "Premature optimization is the root of all evil."
+  attr: "— Donald Knuth"
+
+- id: torvalds-1
+  text: "Talk is cheap. Show me the code."
+  attr: "— Linus Torvalds"
+
+- id: hawking-1
+  text: "Science is not only a disciple of reason but, also, one of romance and passion."
+  attr: "— Stephen Hawking"
+
+- id: bohr-1
+  text: "An expert is a person who has found out by his own painful experience all the mistakes that one can make in a very narrow field."
+  attr: "— Niels Bohr"
+
+- id: szentgyorgyi-1
+  text: "Research is to see what everybody else has seen, and to think what nobody else has thought."
+  attr: "— Albert Szent-Györgyi"
+
+- id: curie-1
+  text: "Nothing in life is to be feared, it is only to be understood."
+  attr: "— Marie Curie"
+
+- id: dijkstra-1
+  text: "Simplicity is a prerequisite for reliability."
+  attr: "— Edsger W. Dijkstra"
+
+- id: shannon-1
+  text: "Information is the resolution of uncertainty."
+  attr: "— Claude Shannon"

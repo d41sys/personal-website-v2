@@ -1,0 +1,108 @@
+---
+// Vertical left-side page ruler — ticks track scroll position in cm
+// All tick marks are generated and updated by the inline script below
+---
+
+<div class="v-ruler" id="v-ruler" aria-hidden="true" role="presentation">
+  <div class="v-ruler-track" id="v-ruler-track"></div>
+</div>
+
+<style>
+/* ── Strip ──────────────────────────────────────────────── */
+.v-ruler {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  z-index: 90;
+  background-color: var(--color-bg);
+  border-right: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: background-color 0.25s, border-color 0.25s;
+}
+
+/* ── Scrolling track (contains all ticks) ───────────────── */
+.v-ruler-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+}
+
+/* ── Tick base ──────────────────────────────────────────── */
+.v-tick {
+  position: absolute;
+  right: 0;
+  height: 1px;
+  background-color: var(--color-muted);
+}
+.v-tick--major { width: 9px;  opacity: 0.8; }
+.v-tick--minor { width: 4px;  opacity: 0.4; }
+
+/* ── Cm labels ──────────────────────────────────────────── */
+.v-tick-label {
+  position: absolute;
+  right: 11px;
+  top: -4px;
+  font-family: var(--font-mono);
+  font-size: 0.38rem;
+  color: var(--color-muted);
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+  opacity: 0.75;
+}
+
+/* ── Hide on mobile / narrow ────────────────────────────── */
+@media (max-width: 640px) {
+  .v-ruler { display: none; }
+}
+</style>
+
+<script is:inline>
+(function () {
+  var CM_PX = 96 / 2.54; // 37.795 px per cm at 96 dpi
+  var track = document.getElementById('v-ruler-track');
+  if (!track) return;
+
+  function build() {
+    var docH = Math.max(document.body.scrollHeight, window.innerHeight * 2);
+    var maxCm = Math.ceil(docH / CM_PX) + 2;
+    track.innerHTML = '';
+
+    for (var i = 0; i <= maxCm; i++) {
+      // Major tick (every 1 cm)
+      var maj = document.createElement('div');
+      maj.className = 'v-tick v-tick--major';
+      maj.style.top = (i * CM_PX) + 'px';
+
+      if (i > 0) {
+        var lbl = document.createElement('span');
+        lbl.className = 'v-tick-label';
+        lbl.textContent = i;
+        maj.appendChild(lbl);
+      }
+      track.appendChild(maj);
+
+      // Minor tick (every 0.5 cm)
+      if (i < maxCm) {
+        var min = document.createElement('div');
+        min.className = 'v-tick v-tick--minor';
+        min.style.top = (i * CM_PX + CM_PX / 2) + 'px';
+        track.appendChild(min);
+      }
+    }
+  }
+
+  function sync() {
+    track.style.transform = 'translateY(' + (-window.scrollY) + 'px)';
+  }
+
+  build();
+  sync();
+  window.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', function () { build(); sync(); });
+})();
+</script>

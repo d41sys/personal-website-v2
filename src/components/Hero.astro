@@ -15,40 +15,40 @@ const h = allHero[0].data;
     <div class="hero-grid">
       <!-- Left: profile photo -->
       <div data-reveal class="hero-photo-col" style="flex-shrink: 0; display: flex;">
-        <div
-          style="
-          width: 16rem;
-          height: 100%;
-          min-height: 9rem;
-          overflow: hidden;
-          border: 1px solid var(--color-border);
-          background-color: var(--color-surface);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        "
-        >
-          <img
-            src="/profile.jpg"
-            alt={h.name}
-            width="256"
-            height="320"
-            style="width:100%;height:100%;object-fit:cover;display:block;"
-            onerror="this.style.display='none';this.parentElement.querySelector('.photo-placeholder').style.display='flex';"
-          />
-          <div
-            class="photo-placeholder"
-            style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:0.25rem;"
-          >
-            <span
-              style="font-family:var(--font-mono);font-size:1.5rem;font-weight:700;opacity:0.15;"
-              >TDL</span
+        <div class="photo-status-wrap">
+          <div class="photo-container">
+            <img
+              src="/profile.jpg"
+              alt={h.name}
+              width="256"
+              height="320"
+              style="width:100%;height:100%;object-fit:cover;display:block;"
+              onerror="this.style.display='none';this.parentElement.querySelector('.photo-placeholder').style.display='flex';"
+            />
+            <div
+              class="photo-placeholder"
+              style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:0.25rem;"
             >
-            <span
-              style="font-family:var(--font-mono);font-size:0.6rem;opacity:0.35;text-align:center;padding:0 0.5rem;"
-              >add profile.jpg<br />to public/</span
-            >
+              <span
+                style="font-family:var(--font-mono);font-size:1.5rem;font-weight:700;opacity:0.15;"
+                >TDL</span
+              >
+              <span
+                style="font-family:var(--font-mono);font-size:0.6rem;opacity:0.35;text-align:center;padding:0 0.5rem;"
+                >add profile.jpg<br />to public/</span
+              >
+            </div>
           </div>
+          {h.status && (
+            <div class="photo-status-badge" aria-label={h.status}>
+              <span class="status-dot" aria-hidden="true"></span>
+              <div class="status-ticker" aria-hidden="true">
+                <span class="status-track">
+                  {h.status}&nbsp;&nbsp;·&nbsp;&nbsp;{h.status}&nbsp;&nbsp;·&nbsp;&nbsp;
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -159,6 +159,81 @@ const h = allHero[0].data;
   .hero-social-link:hover::after {
     height: calc(100% + 2px);
   }
+}
+
+/* ── Profile photo status ───────────────────────────────── */
+.photo-status-wrap {
+  position: relative;
+  width: 16rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-container {
+  flex: 1;
+  min-height: 9rem;
+  overflow: hidden;
+  border: 2px solid var(--color-accent);
+  background-color: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: photo-border-breathe 3s ease-in-out infinite;
+}
+
+@keyframes photo-border-breathe {
+  0%, 100% { border-color: var(--color-accent); }
+  50%       { border-color: color-mix(in srgb, var(--color-accent) 35%, transparent); }
+}
+
+.photo-status-badge {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  background-color: var(--color-accent);
+  color: #fff;
+  padding: 0.22rem 0.4rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  overflow: hidden;
+}
+[data-theme="dark"] .photo-status-badge { color: #161618; }
+
+.status-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  background-color: currentColor;
+  flex-shrink: 0;
+  animation: status-blink 1.4s step-end infinite;
+}
+@keyframes status-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Marquee ticker */
+.status-ticker {
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+.status-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker-scroll 9s linear infinite;
+}
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .status-track { animation: none; }
 }
 
 .hero-grid {

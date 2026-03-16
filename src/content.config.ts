@@ -149,6 +149,7 @@ const hero = defineCollection({
     institution: z.string(),
     tagline: z.string(),
     bio: z.string(),
+    status: z.string().optional().default(''),
   }),
 });
 
@@ -163,7 +164,17 @@ const researchIntro = defineCollection({
   }),
 });
 
+const quotes = defineCollection({
+  loader: file('src/content/quotes/quotes.yaml'),
+  schema: z.object({
+    id: z.string(),
+    text: z.string(),
+    attr: z.string(),
+  }),
+});
+
 export const collections = {
+  quotes,
   publications,
   experience,
   honors,
