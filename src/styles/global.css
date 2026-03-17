@@ -645,3 +645,12 @@ a {
   .fab:hover                            { animation: fab-border-rotate 3s linear infinite !important; background: linear-gradient(var(--color-bg), var(--color-bg)) padding-box, conic-gradient(from var(--fab-angle), var(--color-border) 0%, var(--color-border) 82%, var(--color-accent) 82%) border-box !important; color: var(--color-muted) !important; }
   .fab:hover .fab-label-wrap            { max-width: 0 !important; }
 }
+
+/* Twemoji inline images (cross-platform flag/emoji rendering) */
+img.emoji {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: -0.15em;
+  margin: 0 0.05em;
+}

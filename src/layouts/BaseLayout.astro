@@ -92,6 +92,9 @@ const quotesJson = JSON.stringify(quotesRaw.map(q => q.data));
     </script>
 
     <Analytics />
+
+    <!-- Twemoji: cross-platform emoji rendering (fixes flags on Windows) -->
+    <script src="https://cdn.jsdelivr.net/npm/twemoji@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <!-- Full-screen loading overlay -->
@@ -123,6 +126,14 @@ const quotesJson = JSON.stringify(quotesRaw.map(q => q.data));
     </script>
 
     <script is:inline set:html={`window.__QUOTES__=${quotesJson};`}></script>
+    <!-- Parse emoji after page load so Twemoji replaces flag glyphs with <img> -->
+    <script is:inline>
+      window.addEventListener('load', function () {
+        if (typeof twemoji !== 'undefined') {
+          twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+        }
+      });
+    </script>
     <script src="../scripts/cursor.ts"></script>
     <script is:inline>
       (function () {

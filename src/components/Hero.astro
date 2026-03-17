@@ -18,12 +18,18 @@ const h = allHero[0].data;
         <div class="photo-status-wrap">
           <div class="photo-container">
             <img
+              class="photo-layer photo-layer-a"
               src="/profile.jpg"
               alt={h.name}
               width="256"
               height="320"
-              style="width:100%;height:100%;object-fit:cover;display:block;"
-              onerror="this.style.display='none';this.parentElement.querySelector('.photo-placeholder').style.display='flex';"
+            />
+            <img
+              class="photo-layer photo-layer-b"
+              src="/profile0.jpg"
+              alt={h.name}
+              width="256"
+              height="320"
             />
             <div
               class="photo-placeholder"
@@ -180,6 +186,51 @@ const h = allHero[0].data;
   align-items: center;
   justify-content: center;
   animation: photo-border-breathe 3s ease-in-out infinite;
+  position: relative;
+}
+
+.photo-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform-origin: center center;
+  will-change: transform, opacity, filter;
+}
+
+/* Photo A sits on top; photo B underneath */
+.photo-layer-a { z-index: 2; animation: photo-blend-a 12s ease-in-out infinite; }
+.photo-layer-b { z-index: 1; animation: photo-blend-b 12s ease-in-out infinite; }
+
+/*
+ * Cycle (12 s):
+ *   0 – 45 %  → A visible, slowly zooms in (Ken Burns)
+ *   45 – 50 % → A blurs + fades out; B fades in clear
+ *   50 – 95 % → B visible, slowly zooms in (Ken Burns)
+ *   95 – 100% → B blurs + fades out; A fades back in
+ */
+@keyframes photo-blend-a {
+  0%       { opacity: 1; transform: scale(1);    filter: blur(0px) brightness(1); }
+  45%      { opacity: 1; transform: scale(1.07); filter: blur(0px) brightness(1); }
+  50%      { opacity: 0; transform: scale(1.09); filter: blur(10px) brightness(1.15); }
+  50.01%   { opacity: 0; transform: scale(1);    filter: blur(0px) brightness(1); }
+  95%      { opacity: 0; transform: scale(1);    filter: blur(0px) brightness(1); }
+  100%     { opacity: 1; transform: scale(1);    filter: blur(0px) brightness(1); }
+}
+
+@keyframes photo-blend-b {
+  0%       { opacity: 0; transform: scale(1);    filter: blur(0px) brightness(1); }
+  50%      { opacity: 0; transform: scale(1);    filter: blur(0px) brightness(1); }
+  55%      { opacity: 1; transform: scale(1);    filter: blur(0px) brightness(1); }
+  95%      { opacity: 1; transform: scale(1.07); filter: blur(0px) brightness(1); }
+  100%     { opacity: 0; transform: scale(1.09); filter: blur(10px) brightness(1.15); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-layer-a { opacity: 1; transform: none; filter: none; animation: none; }
+  .photo-layer-b { opacity: 0; animation: none; }
 }
 
 @keyframes photo-border-breathe {
