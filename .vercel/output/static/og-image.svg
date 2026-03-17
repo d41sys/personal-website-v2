@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#FAFAFA"/>
+  <rect x="0" y="0" width="4" height="630" fill="#2563EB"/>
+  <text x="80" y="220" font-family="monospace" font-size="72" font-weight="700" fill="#1A1A1A" letter-spacing="-2">Tien-Dat Le</text>
+  <text x="80" y="290" font-family="monospace" font-size="28" font-weight="300" fill="#6B7280">EngD Researcher · Eindhoven University of Technology</text>
+  <text x="80" y="360" font-family="monospace" font-size="24" font-weight="400" fill="#1A1A1A">Adversarially robust ML for safety-critical systems</text>
+  <text x="80" y="430" font-family="monospace" font-size="20" font-weight="300" fill="#6B7280">7 Q1 publications · 79+ citations · IEEE TIFS reviewer</text>
+  <text x="80" y="560" font-family="monospace" font-size="18" font-weight="300" fill="#2563EB">d41sy.com</text>
+</svg>

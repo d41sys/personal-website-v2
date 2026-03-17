@@ -1,0 +1,501 @@
+---
+import { getCollection } from 'astro:content';
+
+const [heroRaw, pubsRaw, expRaw, eduRaw, skillsRaw, researchRaw] = await Promise.all([
+  getCollection('hero'),
+  getCollection('publications'),
+  getCollection('experience'),
+  getCollection('education'),
+  getCollection('skills'),
+  getCollection('research-interests'),
+]);
+
+const hero = heroRaw[0]?.data;
+
+// Build terminal filesystem data
+const termData = {
+  whoami: hero
+    ? `${hero.name} (${hero.flag} ${hero.role} · ${hero.institution})\n${hero.tagline.replace(/\*\*/g, '')}\n\n${hero.bio.replace(/\*\*|\[.*?\]\(.*?\)/g, (m: string) => m.startsWith('[') ? m.slice(1, m.indexOf(']')) : '')}`
+    : 'Tien-Dat Le — EngD Researcher',
+
+  publications: pubsRaw
+    .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+    .map(p => {
+      const d = p.data;
+      const tag = d.category === 'first-author' ? '[1st]' : d.category === 'under-review' ? '[sub]' : '[co.]';
+      return `${tag} [${p.id}] ${d.title}\n       ${d.authors.replace(/\*\*/g, '')} — ${d.year}\n       ${d.journal}`;
+    })
+    .join('\n\n'),
+
+  experience: expRaw
+    .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+    .map(e => {
+      const d = e.data;
+      const lines = [`${d.title} @ ${d.organization} (${d.location})\n${d.period}`];
+      if (Array.isArray(d.description)) {
+        d.description.forEach((l: string) => lines.push(`  · ${l}`));
+      }
+      return lines.join('\n');
+    })
+    .join('\n\n'),
+
+  education: eduRaw
+    .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+    .map(e => {
+      const d = e.data;
+      const lines = [`${d.flag} ${d.degree}\n${d.institution} — ${d.period}`];
+      if (d.gpa) lines.push(`GPA: ${d.gpa}`);
+      if (d.thesis) lines.push(`Thesis: ${d.thesis}`);
+      if (d.award) lines.push(`Award: ${d.award}`);
+      return lines.join('\n');
+    })
+    .join('\n\n'),
+
+  skills: skillsRaw
+    .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+    .map(s => `${s.data.area}:\n  ${s.data.items.join(', ')}`)
+    .join('\n\n'),
+
+  research: researchRaw
+    .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+    .map(r => `· ${r.data.label}`)
+    .join('\n'),
+};
+
+const termJson = JSON.stringify(termData);
+---
+
+<!-- Terminal trigger button -->
+<button
+  id="term-btn"
+  aria-label="Open terminal"
+  class="fab term-btn"
+  style="--fab-delay: 1.5s"
+>
+  <span class="fab-label-wrap" aria-hidden="true">
+    <span class="fab-label">&gt;_ terminal</span>
+  </span>
+  <span class="fab-icon">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <polyline points="2,4 6,7 2,10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="7" y1="10" x2="12" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </span>
+</button>
+
+<!-- Terminal window -->
+<div id="term-window" class="term-window" aria-hidden="true" role="dialog" aria-label="Interactive terminal">
+  <div class="term-titlebar" id="term-drag-handle">
+    <span class="term-title">tdat@portfolio:~$</span>
+    <div class="term-controls">
+      <button class="term-ctrl term-ctrl-close" id="term-close" aria-label="Close terminal">×</button>
+    </div>
+  </div>
+  <div class="term-output" id="term-output" aria-live="polite"></div>
+  <div class="term-inputrow">
+    <span class="term-prompt">❯</span>
+    <input
+      id="term-input"
+      class="term-input"
+      type="text"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+      maxlength="80"
+      aria-label="Terminal input"
+      placeholder="type 'help'"
+    />
+  </div>
+</div>
+
+<style>
+/* ── Terminal trigger button ─────────────────────────── */
+.term-btn {
+  bottom: 7.25rem;
+}
+
+@media (max-width: 640px) {
+  .term-btn { bottom: 6.75rem; }
+}
+
+/* ── Terminal window ─────────────────────────────────── */
+.term-window {
+  position: fixed;
+  bottom: 10rem;
+  right: 1.75rem;
+  z-index: 200;
+
+  width: min(480px, calc(100vw - 2rem));
+  height: 340px;
+  max-height: calc(100dvh - 10rem);
+
+  display: flex;
+  flex-direction: column;
+  background: #0e0e10;
+  border: 1px solid #2a2a2e;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: #d4d4d8;
+  overflow: hidden;
+
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.term-window.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+@media (max-width: 640px) {
+  .term-window {
+    bottom: 7rem;
+    right: 0.5rem;
+    left: 0.5rem;
+    width: auto;
+  }
+}
+
+/* Title bar */
+.term-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0.75rem;
+  background: #18181b;
+  border-bottom: 1px solid #2a2a2e;
+  cursor: grab;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.term-title {
+  color: #71717a;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.term-controls {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.term-ctrl {
+  width: 1.1rem;
+  height: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: #71717a;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.term-ctrl-close:hover { color: #f87171; }
+
+/* Output area */
+.term-output {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.6rem 0.75rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.65;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 transparent;
+}
+
+.term-output::-webkit-scrollbar { width: 4px; }
+.term-output::-webkit-scrollbar-track { background: transparent; }
+.term-output::-webkit-scrollbar-thumb { background: #3f3f46; }
+
+/* Color classes for output */
+.term-output .c-green  { color: #4ade80; }
+.term-output .c-blue   { color: #60a5fa; }
+.term-output .c-yellow { color: #fbbf24; }
+.term-output .c-muted  { color: #71717a; }
+.term-output .c-red    { color: #f87171; }
+.term-output .c-white  { color: #fafafa; }
+
+/* Input row */
+.term-inputrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-top: 1px solid #2a2a2e;
+  flex-shrink: 0;
+}
+
+.term-prompt {
+  color: #4ade80;
+  flex-shrink: 0;
+  font-size: 0.7rem;
+}
+
+.term-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #d4d4d8;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  caret-color: #4ade80;
+}
+
+.term-input::placeholder {
+  color: #3f3f46;
+}
+</style>
+
+<script is:inline define:vars={{ termJson }}>
+(function () {
+  const DATA = JSON.parse(termJson);
+
+  const btn     = document.getElementById('term-btn');
+  const win     = document.getElementById('term-window');
+  const output  = document.getElementById('term-output');
+  const input   = document.getElementById('term-input');
+  const closeBtn = document.getElementById('term-close');
+
+  if (!btn || !win || !output || !input) return;
+
+  // ── Drag-to-reposition (desktop) ───────────────────
+  let dragging = false, dragOX = 0, dragOY = 0;
+  const handle = document.getElementById('term-drag-handle');
+  if (handle) {
+    handle.addEventListener('mousedown', (e) => {
+      if (e.target === closeBtn) return;
+      dragging = true;
+      const rect = win.getBoundingClientRect();
+      dragOX = e.clientX - rect.left;
+      dragOY = e.clientY - rect.top;
+      win.style.transition = 'none';
+      document.body.style.userSelect = 'none';
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      const x = e.clientX - dragOX;
+      const y = e.clientY - dragOY;
+      win.style.right = 'auto';
+      win.style.bottom = 'auto';
+      win.style.left = x + 'px';
+      win.style.top  = y + 'px';
+    });
+    document.addEventListener('mouseup', () => {
+      dragging = false;
+      win.style.transition = '';
+      document.body.style.userSelect = '';
+    });
+  }
+
+  // ── Toggle open/close ─────────────────────────────
+  function open() {
+    win.classList.add('is-open');
+    win.setAttribute('aria-hidden', 'false');
+    btn.classList.add('is-active');
+    input.focus();
+  }
+
+  function close() {
+    win.classList.remove('is-open');
+    win.setAttribute('aria-hidden', 'true');
+    btn.classList.remove('is-active');
+  }
+
+  btn.addEventListener('click', () => win.classList.contains('is-open') ? close() : open());
+  if (closeBtn) closeBtn.addEventListener('click', close);
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && win.classList.contains('is-open')) close();
+  });
+
+  // ── Print helpers ─────────────────────────────────
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function print(html) {
+    const p = document.createElement('div');
+    p.innerHTML = html;
+    output.appendChild(p);
+    output.scrollTop = output.scrollHeight;
+  }
+
+  function printText(text, cls) {
+    print('<span class="' + (cls || '') + '">' + esc(text) + '</span>');
+  }
+
+  function printEcho(cmd) {
+    print('<span class="c-muted">❯ ' + esc(cmd) + '</span>');
+  }
+
+  // ── Command history ───────────────────────────────
+  const history = [];
+  let histIdx = -1;
+
+  // ── Welcome message ───────────────────────────────
+  print('<span class="c-green">d41sy.com</span> <span class="c-muted">— interactive profile terminal</span>');
+  print('<span class="c-muted">Type <span class="c-yellow">help</span> to see available commands.</span>');
+  print('');
+
+  // ── Command handlers ──────────────────────────────
+  const FILES = {
+    'publications.txt': DATA.publications,
+    'experience.txt':   DATA.experience,
+    'education.txt':    DATA.education,
+    'skills.txt':       DATA.skills,
+    'research.txt':     DATA.research,
+    'readme.txt':
+`d41sy.com — personal academic website
+Author: Tien-Dat Le
+Contact: tiendatt.716@gmail.com
+
+This terminal is a fun way to explore my profile.
+For the full interactive version, scroll the page.
+Want to know more? Try the AI chat widget (bottom-right).`,
+  };
+
+  function runCmd(raw) {
+    const line = raw.trim();
+    if (!line) return;
+
+    history.unshift(line);
+    histIdx = -1;
+    printEcho(line);
+
+    const parts = line.split(/\s+/);
+    const cmd = parts[0].toLowerCase();
+
+    switch (cmd) {
+      case 'help':
+        print(
+          '<span class="c-yellow">Available commands:</span>\n' +
+          '  <span class="c-blue">whoami</span>           — identity & bio\n' +
+          '  <span class="c-blue">ls</span>               — list files\n' +
+          '  <span class="c-blue">cat &lt;file&gt;</span>      — read a file\n' +
+          '  <span class="c-blue">research</span>         — research interests\n' +
+          '  <span class="c-blue">publications</span>     — list all publications\n' +
+          '  <span class="c-blue">experience</span>       — work history\n' +
+          '  <span class="c-blue">education</span>        — academic background\n' +
+          '  <span class="c-blue">skills</span>           — technical skills\n' +
+          '  <span class="c-blue">clear</span>            — clear screen\n' +
+          '  <span class="c-blue">exit</span>             — close terminal'
+        );
+        break;
+
+      case 'whoami':
+        printText(DATA.whoami, 'c-white');
+        break;
+
+      case 'ls': {
+        const arg = parts[1];
+        if (!arg || arg === '.' || arg === '~') {
+          print(
+            Object.keys(FILES)
+              .map(f => '<span class="c-blue">' + f + '</span>')
+              .join('  ')
+          );
+        } else {
+          printText('ls: ' + arg + ': no such directory', 'c-red');
+        }
+        break;
+      }
+
+      case 'cat': {
+        const fname = (parts[1] || '').toLowerCase();
+        if (!fname) {
+          printText('usage: cat <filename>', 'c-red');
+        } else if (FILES[fname]) {
+          printText(FILES[fname], 'c-white');
+        } else {
+          printText('cat: ' + fname + ': no such file — try `ls` to see files', 'c-red');
+        }
+        break;
+      }
+
+      case 'research':
+        printText(DATA.research, 'c-white');
+        break;
+
+      case 'publications':
+        printText(DATA.publications, 'c-white');
+        break;
+
+      case 'experience':
+        printText(DATA.experience, 'c-white');
+        break;
+
+      case 'education':
+        printText(DATA.education, 'c-white');
+        break;
+
+      case 'skills':
+        printText(DATA.skills, 'c-white');
+        break;
+
+      case 'clear':
+      case 'cls':
+        output.innerHTML = '';
+        break;
+
+      case 'exit':
+      case 'q':
+      case 'quit':
+        close();
+        break;
+
+      case 'pwd':
+        printText('/home/tdat/portfolio', 'c-white');
+        break;
+
+      case 'echo':
+        printText(parts.slice(1).join(' '), 'c-white');
+        break;
+
+      case 'date':
+        printText(new Date().toUTCString(), 'c-white');
+        break;
+
+      default:
+        printText(cmd + ': command not found — try `help`', 'c-red');
+    }
+    print('');
+  }
+
+  // ── Input handling ─────────────────────────────────
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const val = input.value;
+      input.value = '';
+      runCmd(val);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (histIdx < history.length - 1) histIdx++;
+      input.value = history[histIdx] || '';
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (histIdx > 0) histIdx--;
+      else { histIdx = -1; input.value = ''; return; }
+      input.value = history[histIdx] || '';
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      const partial = input.value.toLowerCase();
+      const all = ['help','whoami','ls','cat','research','publications','experience','education','skills','clear','exit','pwd','echo','date'];
+      const matches = all.filter(c => c.startsWith(partial));
+      if (matches.length === 1) input.value = matches[0];
+    }
+  });
+})();
+</script>

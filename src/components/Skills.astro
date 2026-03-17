@@ -44,7 +44,7 @@ const totalReviews = peerReview.reduce((sum, r) => sum + r.count, 0);
         <div style="display:flex;flex-direction:column;">
           {peerReview.map(item => (
             <div class="peer-row">
-              <span style="font-size:0.82rem;padding:0.25rem 0;">{item.journal}</span>
+              <span class="peer-journal" style="font-size:0.82rem;padding:0.25rem 0;">{item.journal}</span>
               <span class="meta" style="flex-shrink:0;margin-left:0.75rem;">{item.count}×</span>
             </div>
           ))}
@@ -59,6 +59,9 @@ const totalReviews = peerReview.reduce((sum, r) => sum + r.count, 0);
   grid-template-columns: 1fr;
   gap: 2.5rem;
 }
+.skills-grid > div {
+  min-width: 0;
+}
 .peer-row {
   display: flex;
   justify-content: space-between;
@@ -68,7 +71,13 @@ const totalReviews = peerReview.reduce((sum, r) => sum + r.count, 0);
   box-shadow: inset 2px 0 0 transparent;
   transition: padding-left 0.15s, box-shadow 0.15s;
   gap: 0.5rem;
-  flex-wrap: wrap;
+}
+
+.peer-journal {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 @media (min-width: 641px) {
