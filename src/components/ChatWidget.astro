@@ -3,7 +3,14 @@
 // Calls /api/chat (SSR endpoint, requires GEMINI_API_KEY)
 ---
 
-<!-- Chat trigger button -->
+<!-- Chat tooltip -->
+<div id="chat-tooltip" class="chat-tooltip" role="tooltip" aria-live="polite">
+  <span class="chat-tooltip-text">Ask Daisy about my research, publications, or background</span>
+  <button class="chat-tooltip-dismiss" id="chat-tooltip-dismiss" aria-label="Dismiss">×</button>
+  <span class="chat-tooltip-arrow" aria-hidden="true"></span>
+</div>
+
+<!-- Chat trigger button (FAB — desktop only) -->
 <button
   id="chat-btn"
   aria-label="Ask Daisy anything"
@@ -47,6 +54,11 @@
       <button class="chat-header-btn" id="chat-expand" aria-label="Expand chat" title="Expand / Restore">
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
           <path d="M6 1h3v3M4 9H1V6M9 1L5.5 4.5M1 9l3.5-3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="chat-header-btn" id="chat-clear" aria-label="Clear conversation" title="Clear history">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1.5 2.5h7M4 2.5V1.5h2V2.5M2.5 2.5l.5 6h4l.5-6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
       <button class="chat-header-btn chat-close-btn" id="chat-close" aria-label="Close chat">
@@ -93,9 +105,51 @@
 </div>
 
 <style>
-/* ── Chat trigger button ──────────────────────────── */
+/* ── Chat trigger button (FAB, desktop only) ─────── */
 .chat-btn { bottom: 4.5rem; }
-@media (max-width: 640px) { .chat-btn { bottom: 4rem; } }
+@media (max-width: 900px) { .chat-btn { display: none !important; } }
+
+/* ── Chat tooltip (JS-positioned below the active trigger) ── */
+.chat-tooltip {
+  position: fixed;
+  /* top / left set by JS */
+  z-index: 190;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+  background: var(--color-accent);
+  color: #fff;
+  padding: 0.55rem 0.7rem;
+  width: 14rem;
+  border: 1px solid var(--color-accent);
+  pointer-events: none;
+  opacity: 0; transform: var(--tooltip-enter, translateY(-4px));
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.chat-tooltip.is-visible {
+  opacity: 1; transform: translateY(0); pointer-events: auto;
+}
+.chat-tooltip-text {
+  font-family: var(--font-mono);
+  font-size: 0.65rem; line-height: 1.55;
+  letter-spacing: 0.01em;
+  flex: 1;
+}
+.chat-tooltip-dismiss {
+  background: transparent; border: none;
+  color: rgba(255,255,255,0.65); cursor: pointer;
+  font-size: 1rem; line-height: 1; padding: 0;
+  flex-shrink: 0; margin-top: -0.05rem;
+  transition: color 0.15s;
+}
+.chat-tooltip-dismiss:hover { color: #fff; }
+/* Upward-pointing arrow at top of tooltip */
+.chat-tooltip-arrow {
+  position: absolute;
+  top: -5px;
+  /* left set by JS to align with the nav button */
+  width: 9px; height: 5px;
+  background: var(--color-accent);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
 
 /* ── Chat window ──────────────────────────────────── */
 .chat-window {
@@ -119,8 +173,8 @@
   width: min(760px, calc(100vw - 2rem));
   height: min(860px, calc(100dvh - 9rem));
 }
-@media (max-width: 640px) {
-  .chat-window { bottom: 7rem; right: 0.5rem; left: 0.5rem; width: auto !important; height: 70dvh !important; }
+@media (max-width: 900px) {
+  .chat-window { bottom: 1rem; right: 0.5rem; left: 0.5rem; width: auto !important; height: 80dvh !important; }
 }
 
 /* ── Resize grip ──────────────────────────────────── */
@@ -414,7 +468,8 @@
 
 <script>
 (function () {
-  const btn        = document.getElementById('chat-btn') as HTMLButtonElement;
+  const btn        = document.getElementById('chat-btn') as HTMLButtonElement | null;       // FAB (desktop)
+  const btnMobile  = document.getElementById('chat-btn-mobile') as HTMLButtonElement | null; // nav (mobile)
   const win        = document.getElementById('chat-window') as HTMLElement;
   const msgs       = document.getElementById('chat-messages') as HTMLElement;
   const input      = document.getElementById('chat-input') as HTMLTextAreaElement;
@@ -425,25 +480,172 @@
   const statusTxt  = document.getElementById('chat-status-text');
   const statusDot  = document.getElementById('chat-status-dot');
   const charCount  = document.getElementById('chat-charcount');
+  const tooltip    = document.getElementById('chat-tooltip');
+  const tooltipDismiss = document.getElementById('chat-tooltip-dismiss');
 
-  if (!btn || !win || !msgs || !input || !sendBtn) return;
+  // Returns whichever trigger button is currently visible
+  function activeBtn(): HTMLButtonElement | null {
+    return (btnMobile && getComputedStyle(btnMobile).display !== 'none') ? btnMobile : btn;
+  }
+
+  // ── Tooltip ────────────────────────────────────────
+  let tooltipTimer: ReturnType<typeof setTimeout> | null = null;
+
+  function positionTooltip() {
+    const trigger = activeBtn();
+    if (!tooltip || !trigger) return;
+    const rect = trigger.getBoundingClientRect();
+    const TW = 224; // matches width: 14rem
+    const isMobile = trigger === btnMobile;
+
+    // Desktop: right-align tooltip with the FAB and shift left; mobile: centre on button
+    let left = isMobile
+      ? rect.left + rect.width / 2 - TW / 2
+      : rect.right - TW;
+    left = Math.max(8, Math.min(left, window.innerWidth - TW - 8));
+    tooltip.style.left = left + 'px';
+
+    const arrowEl = tooltip.querySelector('.chat-tooltip-arrow') as HTMLElement | null;
+    const arrowX = (rect.left + rect.width / 2 - left - 4.5) + 'px';
+
+    if (isMobile) {
+      // Below the nav button — arrow points up at top of tooltip
+      tooltip.style.top    = (rect.bottom + 8) + 'px';
+      tooltip.style.bottom = 'auto';
+      tooltip.style.setProperty('--tooltip-enter', 'translateY(-4px)');
+      if (arrowEl) {
+        arrowEl.style.top        = '-5px';
+        arrowEl.style.bottom     = 'auto';
+        arrowEl.style.left       = arrowX;
+        arrowEl.style.clipPath   = 'polygon(50% 0%, 0% 100%, 100% 100%)'; // ▲ up
+        arrowEl.style.width      = '9px';
+        arrowEl.style.height     = '5px';
+      }
+    } else {
+      // Above the FAB — arrow points down at bottom of tooltip
+      tooltip.style.top    = 'auto';
+      tooltip.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+      tooltip.style.setProperty('--tooltip-enter', 'translateY(4px)');
+      if (arrowEl) {
+        arrowEl.style.top        = 'auto';
+        arrowEl.style.bottom     = '-5px';
+        arrowEl.style.left       = arrowX;
+        arrowEl.style.clipPath   = 'polygon(0% 0%, 100% 0%, 50% 100%)'; // ▼ down
+        arrowEl.style.width      = '9px';
+        arrowEl.style.height     = '5px';
+      }
+    }
+  }
+
+  function hideTooltip() {
+    if (!tooltip) return;
+    tooltip.classList.remove('is-visible');
+    if (tooltipTimer) { clearTimeout(tooltipTimer); tooltipTimer = null; }
+  }
+  if (tooltip) {
+    tooltipTimer = setTimeout(() => {
+      positionTooltip();
+      tooltip.classList.add('is-visible');
+      tooltipTimer = setTimeout(hideTooltip, 6000);
+    }, 3000);
+  }
+  tooltipDismiss?.addEventListener('click', hideTooltip);
+
+  if (!win || !msgs || !input || !sendBtn) return;
 
   const history: { role: 'user' | 'assistant'; content: string }[] = [];
   let isLoading = false;
-  let welcomed  = false; // Fix #1: prevent duplicate welcome on reopen
+  let welcomed  = false;
+
+  // ── localStorage persistence ───────────────────────
+  const STORAGE_KEY = 'daisy-chat-history';
+  const STORAGE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
+  function saveHistory() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ history, ts: Date.now() }));
+    } catch { /* storage full or unavailable */ }
+  }
+
+  function clearStorage() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
+  }
+
+  function loadStoredHistory(): typeof history {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      const stored = JSON.parse(raw) as { history: typeof history; ts: number };
+      if (Date.now() - stored.ts > STORAGE_TTL) { clearStorage(); return []; }
+      return Array.isArray(stored.history) ? stored.history : [];
+    } catch { return []; }
+  }
 
   // ── Suggestions state ─────────────────────────────
   const ALL_SUGGESTIONS = [
+    // Research & academic
     "What is his current research focus?",
+    "What is adversarially robust ML and why does it matter?",
+    "What is the DigiRES project about?",
+    "Tell me about his federated learning research.",
+    "How does he apply ML to intrusion detection?",
+    "What is a digital twin and how does he use one?",
+    "What is CAN bus intrusion detection?",
+    "Why is adversarial ML important for safety-critical systems?",
+    "What is his Master's thesis about?",
+
+    // Publications
     "Tell me about his publications.",
-    "What are his technical skills?",
+    "Which paper has the most citations?",
+    "What is his most recent publication?",
+    "Does he have any papers under review?",
+    "What journals has he published in?",
+    "Tell me about his electricity theft detection paper.",
+    "Tell me about his in-vehicle IDS paper.",
+
+    // Career & experience
     "Walk me through his career so far.",
-    "Is he open to PhD opportunities?",
-    "What is his educational background?",
-    "What awards or honors has he received?",
-    "Which conferences has he presented at?",
+    "What did he do at Zalo?",
+    "What vulnerabilities did he find at Zalo?",
+    "What is he working on at Innova Energie?",
+    "What does he do at TU/e day to day?",
+    "How did he go from security engineer to ML researcher?",
+    "Why did he move from Vietnam to Korea to the Netherlands?",
+
+    // Skills & tools
+    "What are his technical skills?",
     "What programming languages does he use?",
+    "What ML frameworks does he work with?",
+    "Does he have a security background?",
+    "What does his penetration testing experience look like?",
+
+    // Education
+    "What is his educational background?",
+    "What is an EngD and how is it different from a PhD?",
+    "Where did he do his Master's?",
+    "What was his bachelor thesis about?",
+    "What GPA did he graduate with?",
+
+    // Goals & PhD
+    "Is he open to PhD opportunities?",
+    "When is he applying for a PhD?",
+    "What kind of PhD programs is he targeting?",
+    "What are his long-term research goals?",
+
+    // Personal & fun
+    "Why is his alias d41sy?",
+    "What languages does he speak?",
+    "What is the most impressive thing about him?",
+    "What awards or honors has he received?",
+    "Give me a fun fact about him.",
+    "Describe him in three words.",
+    "What makes him different from other ML researchers?",
+
+    // Contact & connect
     "How can I contact him?",
+    "Where can I find his papers?",
+    "Is he on GitHub?",
+    "Where can I follow his work?",
   ];
   
   const askedSuggestions = new Set<string>();
@@ -576,25 +778,58 @@
     });
   }
 
+  // ── Restore saved history into the UI ─────────────
+  function restoreHistory() {
+    const saved = loadStoredHistory();
+    if (saved.length === 0) return false;
+    history.push(...saved);
+    for (const msg of saved) {
+      if (msg.role === 'user') {
+        appendUserMsg(msg.content);
+      } else {
+        const body = createAssistantMsg();
+        body.innerHTML = renderMarkdown(msg.content);
+      }
+    }
+    return true;
+  }
+
+  // ── Clear conversation ─────────────────────────────
+  const clearBtn = document.getElementById('chat-clear');
+  function clearChat() {
+    history.length = 0;
+    msgs.innerHTML = '';
+    clearStorage();
+    welcomed = false;
+    addWelcome();
+    welcomed = true;
+    renderStarters();
+  }
+  clearBtn?.addEventListener('click', clearChat);
+
   // ── Open / close ───────────────────────────────────
   function openChat() {
     win.classList.add('is-open');
     win.setAttribute('aria-hidden', 'false');
-    btn.classList.add('is-active');
-    // Fix #1: only add welcome once per page load
+    btn?.classList.add('is-active');
+    btnMobile?.classList.add('is-active');
+    hideTooltip();
     if (!welcomed) {
-      addWelcome();
+      const hadHistory = restoreHistory();
+      if (!hadHistory) addWelcome();
       welcomed = true;
     }
-    renderStarters(); // Fix #4: always refresh starters on open
+    renderStarters();
     setTimeout(() => input.focus(), 60);
   }
   function closeChat() {
     win.classList.remove('is-open');
     win.setAttribute('aria-hidden', 'true');
-    btn.classList.remove('is-active');
+    btn?.classList.remove('is-active');
+    btnMobile?.classList.remove('is-active');
   }
-  btn.addEventListener('click', () => win.classList.contains('is-open') ? closeChat() : openChat());
+  btn?.addEventListener('click', () => win.classList.contains('is-open') ? closeChat() : openChat());
+  btnMobile?.addEventListener('click', () => win.classList.contains('is-open') ? closeChat() : openChat());
   if (closeBtn) closeBtn.addEventListener('click', closeChat);
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && win.classList.contains('is-open')) closeChat();
@@ -718,6 +953,7 @@
         history.push({ role: 'assistant', content: reply });
         const body = createAssistantMsg();
         await typeMessage(reply, body);
+        saveHistory();
       }
     } catch {
       thinkingEl.remove();
