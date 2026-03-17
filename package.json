@@ -12,10 +12,13 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.79.0",
     "@astrojs/sitemap": "^3.7.1",
+    "@astrojs/vercel": "^10.0.1",
     "@fontsource/atkinson-hyperlegible-mono": "^5.2.10",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/inter": "^5.2.8",
+    "@google/genai": "^1.45.0",
     "@iconify-json/lucide": "^1.2.97",
     "@iconify-json/simple-icons": "^1.2.73",
     "@phosphor-icons/web": "^2.1.2",
