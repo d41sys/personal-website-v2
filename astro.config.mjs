@@ -9,6 +9,7 @@ export default defineConfig({
   site: 'https://d41sy.com',
   output: 'static',
   adapter: vercel(),
+  devToolbar: { enabled: false },
   integrations: [sitemap(), icon()],
   vite: {
     plugins: [tailwindcss()],

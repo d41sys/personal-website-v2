@@ -243,10 +243,33 @@ const h = allHero[0].data;
   align-items: stretch;
 }
 
+  @media (min-width: 641px) and (max-width: 900px) {
+    #top {
+      padding: 3rem 0 2.5rem !important;
+      min-height: calc(100dvh - var(--nav-h, 3.25rem));
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .hero-grid {
+      gap: 2rem;
+      align-items: start;
+    }
+    .photo-status-wrap {
+      width: 11rem;
+      height: auto;
+    }
+    .photo-container {
+      aspect-ratio: 4 / 5;
+      min-height: unset;
+      flex: none;
+    }
+  }
+
   @media (max-width: 640px) {
     #top {
-      padding: 2.5rem 0 2rem !important;
-      min-height: 100dvh;
+      padding: 2rem 0 !important;
+      min-height: calc(100dvh - var(--nav-h, 3.25rem));
       display: flex !important;
       flex-direction: column;
       justify-content: center;

@@ -86,6 +86,8 @@ const quotesJson = JSON.stringify(quotesRaw.map(q => q.data));
         const stored = localStorage.getItem('theme');
         const theme = stored || 'light';
         document.documentElement.setAttribute('data-theme', theme);
+        // Prevent browser from restoring scroll position on reload
+        if (history.scrollRestoration) history.scrollRestoration = 'manual';
       })();
     </script>
 
@@ -107,6 +109,18 @@ const quotesJson = JSON.stringify(quotesRaw.map(q => q.data));
     <!-- Custom cursor glow dot -->
     <div id="cursor-dot" aria-hidden="true"></div>
     <slot />
+
+    <!-- Set --nav-h so hero section can fill exactly the remaining viewport -->
+    <script is:inline>
+      (function () {
+        function setNavH() {
+          var h = document.getElementById('site-header');
+          if (h) document.documentElement.style.setProperty('--nav-h', h.offsetHeight + 'px');
+        }
+        setNavH();
+        window.addEventListener('resize', setNavH);
+      })();
+    </script>
 
     <script is:inline set:html={`window.__QUOTES__=${quotesJson};`}></script>
     <script src="../scripts/cursor.ts"></script>

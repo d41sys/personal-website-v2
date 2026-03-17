@@ -511,6 +511,11 @@ a {
   pointer-events: none;
 }
 
+/* ─── Tablet base ───────────────────────────────────────── */
+@media (max-width: 900px) {
+  section { padding: 3.25rem 0; }
+}
+
 /* ─── Mobile base ───────────────────────────────────────── */
 @media (max-width: 640px) {
   section { padding: 2.75rem 0; }
@@ -638,4 +643,5 @@ a {
   .collapse-btn:hover                   { color: var(--color-muted) !important; }
   .section-heading:hover .section-heading-rule { width: 2rem !important; }
   .fab:hover                            { animation: fab-border-rotate 3s linear infinite !important; background: linear-gradient(var(--color-bg), var(--color-bg)) padding-box, conic-gradient(from var(--fab-angle), var(--color-border) 0%, var(--color-border) 82%, var(--color-accent) 82%) border-box !important; color: var(--color-muted) !important; }
+  .fab:hover .fab-label-wrap            { max-width: 0 !important; }
 }
