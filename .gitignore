@@ -33,3 +33,4 @@ everything-claude-code/
 .playwright-mcp/
 
 .env
+.vercel/
